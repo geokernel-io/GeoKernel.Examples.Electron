@@ -1,0 +1,19 @@
+{
+  "name": "geokernel-examples-electron",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Electron examples for the GeoKernel GIS SDK.",
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "npm run hello-map",
+    "hello-map": "electron . hello-map"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "geokernel-electron": "1.0.3"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0"
+  }
+}
