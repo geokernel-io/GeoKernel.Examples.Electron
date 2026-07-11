@@ -59,7 +59,8 @@ async function start() {
     navigationToolbar: true,
   });
   
-  viewer.setTool(ViewerTool.PAN);  
+  viewer.setTool(ViewerTool.PAN);
+  viewer.setLicenseKey('G36U-F99B-83M4-FD8F-BMCZ');
   viewer.show();
   viewer.processEvents();
   viewerWasVisible = false;
