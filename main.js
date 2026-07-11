@@ -1,12 +1,35 @@
 "use strict";
 
 const { app } = require("electron");
+const path = require("path");
 
 const EXAMPLES = {
+  "add-layers": "./examples/add-layers/main",
   "hello-map": "./examples/hello-map/main",
 };
 
-const exampleName = process.argv[2] || "hello-map";
+function resolveExampleName(value) {
+  if (!value) {
+    return "hello-map";
+  }
+
+  if (EXAMPLES[value]) {
+    return value;
+  }
+
+  const relativePath = path.isAbsolute(value)
+    ? path.relative(process.cwd(), value)
+    : value;
+  const normalizedPath = relativePath.replace(/\\/g, "/");
+  const match = normalizedPath.match(/(?:^|\/)examples\/([^/]+)(?:\/|$)/);
+  if (match && EXAMPLES[match[1]]) {
+    return match[1];
+  }
+
+  return value;
+}
+
+const exampleName = resolveExampleName(process.argv[2]);
 let activeExample = null;
 
 function fail(error) {
