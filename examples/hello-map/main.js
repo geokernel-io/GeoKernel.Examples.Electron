@@ -58,10 +58,8 @@ async function start() {
     height: 800,
     navigationToolbar: true,
   });
-
-  viewer.setActivationType("Developer");
-  viewer.setTool(ViewerTool.PAN);
-  viewer.setBackground("#F4F6F5");
+  
+  viewer.setTool(ViewerTool.PAN);  
   viewer.show();
   viewer.processEvents();
   viewerWasVisible = false;
