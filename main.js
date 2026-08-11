@@ -3,6 +3,10 @@
 const { app } = require("electron");
 const path = require("path");
 
+// All examples use the repository-owned icon set instead of icons bundled
+// inside the geokernel-electron package.
+process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "Images");
+
 const EXAMPLES = {
   "add-layers": "./examples/add-layers/main",
   "hello-map": "./examples/hello-map/main",

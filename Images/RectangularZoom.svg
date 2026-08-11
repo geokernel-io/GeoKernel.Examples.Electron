@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 64 64"
+   id="svg5"
+   sodipodi:docname="RectangularZoom.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="12.734375"
+     inkscape:cx="32"
+     inkscape:cy="32"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <title
+     id="title1">Rectangular Zoom</title>
+  <desc
+     id="desc1">GeoKernel style rectangular zoom toolbar icon</desc>
+  <!-- selection rectangle shadow/outline -->
+  <!-- selection rectangle body -->
+  <rect
+     x="9.1931248"
+     y="10.742818"
+     width="32.969578"
+     height="24.948719"
+     rx="1.8190112"
+     fill="#a8d8d0"
+     stroke="#627c7a"
+     stroke-width="2.27091"
+     stroke-linejoin="round"
+     vector-effect="non-scaling-stroke"
+     id="rect2" />
+  <!-- inner dashed zoom target -->
+  <!-- magnifier handle outer -->
+  <path
+     d="M 42.9 42.1 L 56.2 55.1"
+     fill="none"
+     stroke="#1b1f23"
+     stroke-width="7"
+     stroke-linecap="round"
+     vector-effect="non-scaling-stroke"
+     id="path3" />
+  <!-- magnifier handle highlight -->
+  <path
+     d="M 42.9 42.1 L 56.2 55.1"
+     fill="none"
+     stroke="#f7f7f7"
+     stroke-width="3.2"
+     stroke-linecap="round"
+     vector-effect="non-scaling-stroke"
+     id="path4" />
+  <!-- magnifier ring outer -->
+  <circle
+     cx="35.5"
+     cy="35.5"
+     r="13.2"
+     fill="#f7f7f7"
+     stroke="#1b1f23"
+     stroke-width="3"
+     vector-effect="non-scaling-stroke"
+     id="circle4" />
+  <!-- magnifier lens -->
+  <!-- small rectangle inside lens to indicate rectangular zoom -->
+  <!-- subtle top-left accent, matching existing set cyan/gray strokes -->
+</svg>
