@@ -82,6 +82,7 @@ async function start() {
     title: "LayerRefresh",
     width: 1200,
     height: 800,
+    navigationToolbar: false,
     layerStyleToolbar: {
       fillColors: ["#D8E5E1", "#D9C7A5", "#C7D7EA", "#D7C5DE"],
       outlineColors: ["#6F8883", "#A24A3D", "#356780", "#6F4D8C"],
