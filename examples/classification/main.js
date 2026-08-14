@@ -210,7 +210,7 @@ function startEventPump() {
 async function start() {
   verifyQtPlatformPlugin();
   keeperWindow = new BrowserWindow({ width: 1, height: 1, show: false, skipTaskbar: true, webPreferences: { sandbox: true } });
-  viewer = new ViewerWindow({ title: "Classifications", width: 1240, height: 760, navigationToolbar: false });
+  viewer = new ViewerWindow({ title: "Classification", width: 1240, height: 760, navigationToolbar: false });
   viewer.addLegendPanel("Legend");
   viewer.setLegendWidth(240);
   viewer.setLegendItems([{ label: "Preparing California sample data...", enabled: true, shape: "none" }]);

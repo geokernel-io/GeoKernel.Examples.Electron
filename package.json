@@ -34,13 +34,15 @@
     "scale-based-layer-visibility": "electron . scale-based-layer-visibility",
     "style-per-feature": "electron . style-per-feature",
     "clear-renderer": "electron . clear-renderer",
-    "classifications": "electron . classifications",
+    "classification": "electron . classification",
     "basic-label": "electron . basic-label",
     "label-font": "electron . label-font",
     "label-halo": "electron . label-halo",
     "label-offset": "electron . label-offset",
     "label-rotation": "electron . label-rotation",
     "label-collision-off": "electron . label-collision-off",
+    "edit-session": "electron . edit-session",
+    "edit-and-save": "electron . edit-and-save",
     "add-point-interactive": "electron . add-point-interactive",
     "add-polyline-interactive": "electron . add-polyline-interactive",
     "add-polygon-interactive": "electron . add-polygon-interactive",
@@ -59,11 +61,13 @@
     "snapping-enabled": "electron . snapping-enabled",
     "edit-dirty-state": "electron . edit-dirty-state",
     "edit-session-signals": "electron . edit-session-signals",
+    "multi-layer-edit": "electron . multi-layer-edit",
     "can-edit-check": "electron . can-edit-check",
     "click-hit-test": "electron . click-hit-test",
     "all-features-at-point": "electron . all-features-at-point",
     "world-tolerance": "electron . world-tolerance",
     "box-select": "electron . box-select",
+    "select-add": "electron . select-add",
     "select-clear": "electron . select-clear",
     "zoom-to-selection": "electron . zoom-to-selection",
     "feature-attributes": "electron . feature-attributes",
@@ -130,7 +134,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "^1.1.43"
+    "geokernel-electron": "1.1.50"
   },
   "devDependencies": {
     "electron": "^38.0.0"
