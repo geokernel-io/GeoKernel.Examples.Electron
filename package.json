@@ -97,6 +97,7 @@
     "xyz-attribution": "electron . xyz-attribution",
     "xyz-diagnostics": "electron . xyz-diagnostics",
     "geo-tiff-load": "electron . geo-tiff-load",
+    "ecw-load": "electron . ecw-load",
     "raster-world-transform": "electron . raster-world-transform",
     "raster-overview": "electron . raster-overview",
     "wkt-read-point": "electron . wkt-read-point",
@@ -137,7 +138,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.1.50"
+    "geokernel-electron": "1.1.57"
   },
   "devDependencies": {
     "electron": "^38.0.0"

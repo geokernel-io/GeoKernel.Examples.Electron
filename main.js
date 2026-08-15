@@ -98,6 +98,7 @@ const EXAMPLES = {
   "xyz-attribution": "./examples/xyz-attribution/main",
   "xyz-diagnostics": "./examples/xyz-diagnostics/main",
   "geo-tiff-load": "./examples/geo-tiff-load/main",
+  "ecw-load": "./examples/ecw-load/main",
   "raster-world-transform": "./examples/raster-world-transform/main",
   "raster-overview": "./examples/raster-overview/main",
   "wkt-read-point": "./examples/wkt-read-point/main",
