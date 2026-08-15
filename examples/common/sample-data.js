@@ -19,7 +19,7 @@ async function ensureDir(dirPath) {
   await fs.promises.mkdir(dirPath, { recursive: true });
 }
 
-function downloadFile(url, destination, redirectCount = 0) {
+function downloadFile(url, destination, redirectCount = 0, onProgress = null) {
   if (redirectCount > 5) {
     return Promise.reject(new Error(`Too many redirects while downloading ${url}`));
   }
@@ -32,7 +32,7 @@ function downloadFile(url, destination, redirectCount = 0) {
       if ([301, 302, 303, 307, 308].includes(statusCode) && location) {
         response.resume();
         const redirectedUrl = new URL(location, url).toString();
-        downloadFile(redirectedUrl, destination, redirectCount + 1).then(resolve, reject);
+        downloadFile(redirectedUrl, destination, redirectCount + 1, onProgress).then(resolve, reject);
         return;
       }
 
@@ -43,6 +43,12 @@ function downloadFile(url, destination, redirectCount = 0) {
       }
 
       const file = fs.createWriteStream(destination);
+      const total = Number(response.headers["content-length"] || 0);
+      let downloaded = 0;
+      response.on("data", (chunk) => {
+        downloaded += chunk.length;
+        onProgress?.(total > 0 ? Math.min(100, Math.round(downloaded * 100 / total)) : null);
+      });
       response.pipe(file);
       file.on("finish", () => {
         file.close(resolve);
@@ -54,7 +60,7 @@ function downloadFile(url, destination, redirectCount = 0) {
   });
 }
 
-async function ensureArchive(url, archiveName) {
+async function ensureArchive(url, archiveName, onProgress = null) {
   const downloadsDir = path.join(SAMPLE_DATA_ROOT, "downloads");
   await ensureDir(downloadsDir);
 
@@ -66,7 +72,7 @@ async function ensureArchive(url, archiveName) {
   const tempPath = `${archivePath}.download`;
   await fs.promises.rm(tempPath, { force: true });
   console.log(`Downloading sample data: ${archiveName}`);
-  await downloadFile(url, tempPath);
+  await downloadFile(url, tempPath, 0, onProgress);
   await fs.promises.rename(tempPath, archivePath);
   return archivePath;
 }
@@ -77,15 +83,16 @@ async function extractArchive(archivePath, extractDir) {
   zip.extractAllTo(extractDir, true);
 }
 
-async function ensureSampleFile(url, archiveName, extractName, targetRelativePath) {
+async function ensureSampleFile(url, archiveName, extractName, targetRelativePath, options = {}) {
   const extractDir = path.join(SAMPLE_DATA_ROOT, extractName);
   const targetPath = path.join(extractDir, targetRelativePath);
   if (exists(targetPath)) {
     return targetPath;
   }
 
-  const archivePath = await ensureArchive(url, archiveName);
+  const archivePath = await ensureArchive(url, archiveName, options.onDownloadProgress);
   console.log(`Extracting sample data: ${archiveName}`);
+  options.onExtracting?.();
   await extractArchive(archivePath, extractDir);
 
   if (!exists(targetPath)) {

@@ -11,34 +11,42 @@ const {
 } = require("geokernel-electron");
 
 const PRESETS = Object.freeze([
-  Object.freeze({
-    name: "OpenStreetMap",
-    cacheKey: "open-street-map-v1",
-    urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    minZoom: 0,
-    maxZoom: 19,
-    tileSize: 256,
-    attribution: "© OpenStreetMap contributors",
-  }),
-  Object.freeze({
-    name: "OpenTopoMap",
-    cacheKey: "open-topo-map-v1",
-    urlTemplate: "https://tile.opentopomap.org/{z}/{x}/{y}.png",
-    minZoom: 0,
-    maxZoom: 17,
-    tileSize: 256,
-    attribution: "© OpenTopoMap contributors",
-  }),
-  Object.freeze({
-    name: "Esri World Imagery",
-    cacheKey: "esri-world-imagery-v3",
-    urlTemplate: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    minZoom: 0,
-    maxZoom: 19,
-    tileSize: 256,
-    attribution: "Tiles © Esri",
-  }),
-]);
+  ["Bing Virtual Earth", "http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1"],
+  ["CartoDb Dark Matter", "http://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"],
+  ["CartoDb Dark Matter (No Labels)", "http://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png"],
+  ["CartoDb Positron", "http://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"],
+  ["CartoDb Positron (No Labels)", "http://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"],
+  ["Esri Boundaries Places", "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Gray (dark)", "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Gray (light)", "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Hillshade", "http://services.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri National Geographic", "http://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Navigation Charts", "http://services.arcgisonline.com/ArcGIS/rest/services/Specialty/World_Navigation_Charts/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Ocean", "https://services.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Physical Map", "https://services.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Satellite", "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Shaded Relief", "https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Standard", "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Topo World", "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"],
+  ["Esri Transportation", "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"],
+  ["Google Maps", "https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"],
+  ["Google Satellite", "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"],
+  ["Google Satellite Hybrid", "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"],
+  ["Google Terrain", "https://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}"],
+  ["Google Terrain Hybrid", "https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"],
+  ["Mapzen Global Terrain", "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
+  ["Gempa", "https://demo.gempa.de/gaps/tiles/{z}/{y}/{x}"],
+  ["OpenStreetMap", "https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+  ["OpenTopoMap", "https://tile.opentopomap.org/{z}/{x}/{y}.png"],
+].map(([name, urlTemplate]) => Object.freeze({
+  name,
+  urlTemplate,
+  cacheKey: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+  minZoom: 0,
+  maxZoom: 19,
+  tileSize: 256,
+  attribution: "",
+})));
 const DEFAULT_EXTENT_3857 = extent(-1400000, 4100000, 4200000, 7800000);
 const CONTROL = Object.freeze({ PRESET: 1, CACHE: 2 });
 
@@ -47,7 +55,8 @@ let keeperWindow = null;
 let eventPump = null;
 let viewerWasVisible = false;
 let viewerHiddenSince = 0;
-let selectedPresetName = PRESETS[0].name;
+const DEFAULT_PRESET_NAME = "OpenStreetMap";
+let selectedPresetName = DEFAULT_PRESET_NAME;
 let cacheEnabled = true;
 let closing = false;
 let activeLayerIndex = -1;
@@ -235,7 +244,7 @@ function stop() {
   reloadTimer = null;
   viewerWasVisible = false;
   viewerHiddenSince = 0;
-  selectedPresetName = PRESETS[0].name;
+  selectedPresetName = DEFAULT_PRESET_NAME;
   cacheEnabled = true;
   closing = true;
   activeLayerIndex = -1;

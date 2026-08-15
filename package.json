@@ -17,6 +17,7 @@
     "layer-refresh": "electron . layer-refresh",
     "layer-load-options": "electron . layer-load-options",
     "layer-load-cancel": "electron . layer-load-cancel",
+    "busy-callback": "electron . busy-callback",
     "layer-events": "electron . layer-events",
     "in-memory-layers": "electron . in-memory-layers",
     "minimap": "electron . minimap",
@@ -116,6 +117,7 @@
     "union": "electron . union",
     "union-on-list": "electron . union-on-list",
     "intersection": "electron . intersection",
+    "difference": "electron . difference",
     "sym-difference": "electron . sym-difference",
     "convex-hull-shape": "electron . convex-hull-shape",
     "convex-hull-two": "electron . convex-hull-two",
@@ -128,6 +130,7 @@
     "spatial-predicates": "electron . spatial-predicates",
     "get-crossings": "electron . get-crossings",
     "shape-simplify": "electron . shape-simplify",
+    "shape-centroid": "electron . shape-centroid",
     "tolerance-config": "electron . tolerance-config",
     "topology-batch": "electron . topology-batch",
     "topology": "electron . topology"
