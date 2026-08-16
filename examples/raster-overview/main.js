@@ -17,7 +17,6 @@ const COMMAND = Object.freeze({
   LOAD_WITH: 2,
   BENCHMARK: 3,
   RESET: 4,
-  FULL_EXTENT: 5,
 });
 
 let viewer = null;
@@ -150,6 +149,7 @@ function resetWorkingCopy() {
   if (fs.existsSync(WORKING_RASTER)) fs.rmSync(WORKING_RASTER);
   if (fs.existsSync(OVERVIEW_FILE)) fs.rmSync(OVERVIEW_FILE);
   fs.copyFileSync(sourceRaster, WORKING_RASTER);
+  fs.chmodSync(WORKING_RASTER, 0o666);
   currentMode = "Reset";
   loadElapsedMs = 0;
   lastBenchmark = null;
@@ -168,7 +168,9 @@ function loadRaster(prepareOverview) {
   const started = performance.now();
   viewer.addLayer(WORKING_RASTER, {
     prepareRasterOverviews: prepareOverview,
-    rasterOverviewMinimumPixels: prepareOverview ? 0 : Number.MAX_SAFE_INTEGER,
+    // JSON numbers are transported as doubles. This value is safely above any
+    // practical raster pixel count while remaining exactly representable.
+    rasterOverviewMinimumPixels: prepareOverview ? 0 : 9_000_000_000_000_000,
     rasterOverviewResampling: "AVERAGE",
   });
   loadElapsedMs = Math.round(performance.now() - started);
@@ -196,12 +198,16 @@ function runBenchmark() {
 }
 
 function onCommand(commandId) {
+  setImmediate(() => executeCommand(commandId));
+}
+
+function executeCommand(commandId) {
+  if (!viewer || closing) return;
   try {
     if (commandId === COMMAND.LOAD_WITHOUT) loadRaster(false);
     else if (commandId === COMMAND.LOAD_WITH) loadRaster(true);
     else if (commandId === COMMAND.BENCHMARK) runBenchmark();
     else if (commandId === COMMAND.RESET) resetWorkingCopy();
-    else if (commandId === COMMAND.FULL_EXTENT && viewer.layerCount() > 0) viewer.zoomToLayer(0);
   } catch (error) {
     viewer.setStatusText(`RasterOverview failed: ${error.message}`);
     viewer.clearLog();
@@ -238,11 +244,10 @@ async function start() {
   keeperWindow = new BrowserWindow({ width: 1, height: 1, show: false, skipTaskbar: true, webPreferences: { sandbox: true } });
   viewer = new ViewerWindow({ title: "RasterOverview", width: 1200, height: 800, navigationToolbar: true });
   viewer.addCommandToolbar([
+    { id: COMMAND.RESET, text: "Reset Working Copy" },
     { id: COMMAND.LOAD_WITHOUT, text: "Load Without Overview" },
     { id: COMMAND.LOAD_WITH, text: "Load With Overview" },
     { id: COMMAND.BENCHMARK, text: "Run Downsample Benchmark" },
-    { id: COMMAND.RESET, text: "Reset Working Copy" },
-    { id: COMMAND.FULL_EXTENT, text: "Full Extent" },
   ], onCommand);
   viewer.addLogPanel("Raster overview details");
   viewer.setTool(ViewerTool.PAN);
@@ -254,7 +259,6 @@ async function start() {
   sourceRaster = await ensureSampleFile(SAMPLE_URL, "world_8km_tif.zip", "world_8km_tif", "world_8km.tif");
   if (!viewer || closing) return;
   resetWorkingCopy();
-  loadRaster(false);
 }
 
 function stop() {

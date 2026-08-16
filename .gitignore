@@ -1,5 +1,6 @@
 node_modules/
 npm-debug.log*
 outputs/
+examples/raster-overview/RasterOverviewData/
 .idea/
 .vscode/

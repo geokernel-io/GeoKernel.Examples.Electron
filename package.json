@@ -138,7 +138,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.1.57"
+    "geokernel-electron": "1.1.58"
   },
   "devDependencies": {
     "electron": "^38.0.0"
