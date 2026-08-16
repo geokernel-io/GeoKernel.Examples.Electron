@@ -78,6 +78,7 @@ const EXAMPLES = {
   "map-clicked-signal": "./examples/map-clicked-signal/main",
   "selection-box-signal": "./examples/selection-box-signal/main",
   "coordinate-transform": "./examples/coordinate-transform/main",
+  "crs-database": "./examples/crs-database/main",
   "crs-by-authority": "./examples/crs-by-authority/main",
   "on-the-fly-reproject": "./examples/on-the-fly-reproject/main",
   "web-mercator": "./examples/web-mercator/main",

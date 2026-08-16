@@ -77,6 +77,7 @@
     "map-clicked-signal": "electron . map-clicked-signal",
     "selection-box-signal": "electron . selection-box-signal",
     "coordinate-transform": "electron . coordinate-transform",
+    "crs-database": "electron . crs-database",
     "crs-by-authority": "electron . crs-by-authority",
     "on-the-fly-reproject": "electron . on-the-fly-reproject",
     "web-mercator": "electron . web-mercator",

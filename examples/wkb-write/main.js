@@ -29,6 +29,7 @@ let viewerHiddenSince = 0;
 let closing = false;
 let controlsReady = false;
 let mode = "Point";
+let drawingSketch = false;
 const layerIndexes = { Point: -1, Polyline: -1, Polygon: -1 };
 
 function verifyQtPlatformPlugin() {
@@ -57,8 +58,8 @@ function apiName() {
 
 function helpText() {
   if (mode === "Point") return "Click on the map to draw a point. WKB is written automatically.";
-  if (mode === "Polyline") return "Click line vertices, then press Enter or double-click to finish.";
-  return "Click polygon vertices, then press Enter or double-click to finish.";
+  if (mode === "Polyline") return "Click line vertices, then press Enter or double-click to finish. WKB is written automatically.";
+  return "Click polygon vertices, then press Enter or double-click to finish. WKB is written automatically.";
 }
 
 function showEmptyDetails() {
@@ -75,7 +76,6 @@ function activateMode() {
   if (!viewer.setActiveEditLayerIndex(index)) throw new Error(`${LAYERS[mode]} could not be activated.`);
   viewer.setTool(activeTool());
   viewer.setStatusText(helpText());
-  showEmptyDetails();
 }
 
 function spacedHex(bytes) {
@@ -99,12 +99,32 @@ function updateWkb() {
 }
 
 function clearLayers() {
+  drawingSketch = false;
   for (const key of Object.keys(layerIndexes)) {
     const index = layerIndexes[key];
     if (index >= 0 && viewer.isLayerEditing(index)) viewer.rollbackEditLayer(index);
   }
   viewer.invalidateRenderCache(false, true);
   viewer.refreshLayers();
+}
+
+function handleMapMouseDown() {
+  if (!controlsReady || viewer.getTool() !== activeTool()) return;
+  if (mode !== "Point" && drawingSketch) return;
+
+  const index = layerIndexes[mode];
+  if (index < 0) return;
+  if (viewer.layerFeatureCount(index) > 0) {
+    viewer.rollbackEditLayer(index);
+    viewer.beginEditLayer(index);
+    viewer.setActiveEditLayerIndex(index);
+    viewer.setTool(activeTool());
+    viewer.clearLog();
+    viewer.invalidateRenderCache(true, true);
+    viewer.refreshLayers();
+  }
+
+  if (mode !== "Point") drawingSketch = true;
 }
 
 function onControlChanged(controlId, numericValue, textValue) {
@@ -114,10 +134,13 @@ function onControlChanged(controlId, numericValue, textValue) {
     try {
       if (controlId === CONTROL.MODE) {
         mode = textValue;
+        drawingSketch = false;
         clearLayers();
+        viewer.clearLog();
         activateMode();
       } else if (controlId === CONTROL.CLEAR) {
         clearLayers();
+        viewer.clearLog();
         activateMode();
         viewer.setStatusText("Drawn geometries cleared.");
       }
@@ -129,7 +152,17 @@ function onControlChanged(controlId, numericValue, textValue) {
 }
 
 function onViewerEvent(event) {
+  if (event.eventType === ViewerEventType.MAP_MOUSE_DOWN) {
+    try { handleMapMouseDown(); }
+    catch (error) {
+      viewer?.setStatusText(`Previous geometry could not be cleared: ${error.message}`);
+      console.error(error?.stack || error);
+    }
+    return;
+  }
   if (event.eventType !== ViewerEventType.LAYER_EDIT_STATE_CHANGED) return;
+  if (viewer.layerFeatureCount(layerIndexes[mode]) < 1) return;
+  drawingSketch = false;
   setImmediate(() => {
     if (!viewer) return;
     try { updateWkb(); }
@@ -205,6 +238,7 @@ function stop() {
   if (eventPump) clearInterval(eventPump);
   eventPump = null;
   controlsReady = false;
+  drawingSketch = false;
   for (const key of Object.keys(layerIndexes)) layerIndexes[key] = -1;
   if (viewer) { try { viewer.close(); } catch { /* Native window may already be gone. */ } }
   viewer = null;
