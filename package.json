@@ -100,6 +100,7 @@
     "ecw-load": "electron . ecw-load",
     "raster-world-transform": "electron . raster-world-transform",
     "raster-overview": "electron . raster-overview",
+    "raster-tile-cache": "electron . raster-tile-cache",
     "wkt-read-point": "electron . wkt-read-point",
     "wkt-read-polyline": "electron . wkt-read-polyline",
     "wkt-read-polygon": "electron . wkt-read-polygon",
@@ -138,7 +139,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.1.58"
+    "geokernel-electron": "^1.1.59"
   },
   "devDependencies": {
     "electron": "^38.0.0"

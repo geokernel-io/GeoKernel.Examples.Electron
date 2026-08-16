@@ -101,6 +101,7 @@ const EXAMPLES = {
   "ecw-load": "./examples/ecw-load/main",
   "raster-world-transform": "./examples/raster-world-transform/main",
   "raster-overview": "./examples/raster-overview/main",
+  "raster-tile-cache": "./examples/raster-tile-cache/main",
   "wkt-read-point": "./examples/wkt-read-point/main",
   "wkt-read-polyline": "./examples/wkt-read-polyline/main",
   "wkt-read-polygon": "./examples/wkt-read-polygon/main",

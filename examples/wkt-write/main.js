@@ -29,6 +29,7 @@ let viewerHiddenSince = 0;
 let closing = false;
 let controlsReady = false;
 let mode = "Point";
+let drawingSketch = false;
 const layerIndexes = { Point: -1, Polyline: -1, Polygon: -1 };
 
 function verifyQtPlatformPlugin() {
@@ -118,6 +119,7 @@ function updateWkt() {
 }
 
 function clearLayers() {
+  drawingSketch = false;
   for (const key of Object.keys(layerIndexes)) {
     const index = layerIndexes[key];
     if (index < 0) continue;
@@ -127,6 +129,24 @@ function clearLayers() {
   viewer.refreshLayers();
 }
 
+function handleMapMouseDown() {
+  if (!controlsReady || viewer.getTool() !== activeTool()) return;
+  if (mode !== "Point" && drawingSketch) return;
+
+  const index = layerIndexes[mode];
+  if (index < 0) return;
+  if (viewer.layerFeatureCount(index) > 0) {
+    viewer.rollbackEditLayer(index);
+    viewer.beginEditLayer(index);
+    viewer.setActiveEditLayerIndex(index);
+    viewer.setTool(activeTool());
+    viewer.invalidateRenderCache(false, true);
+    viewer.refreshLayers();
+    showEmptyDetails();
+  }
+  if (mode !== "Point") drawingSketch = true;
+}
+
 function onControlChanged(controlId, numericValue, textValue) {
   if (!viewer || !controlsReady) return;
   setImmediate(() => {
@@ -134,6 +154,7 @@ function onControlChanged(controlId, numericValue, textValue) {
     try {
       if (controlId === CONTROL.MODE) {
         mode = textValue;
+        drawingSketch = false;
         clearLayers();
         activateMode();
       } else if (controlId === CONTROL.CLEAR) {
@@ -149,7 +170,16 @@ function onControlChanged(controlId, numericValue, textValue) {
 }
 
 function onViewerEvent(event) {
+  if (event.eventType === ViewerEventType.MAP_MOUSE_DOWN) {
+    try { handleMapMouseDown(); }
+    catch (error) {
+      viewer?.setStatusText(`Previous geometry could not be cleared: ${error.message}`);
+      console.error(error?.stack || error);
+    }
+    return;
+  }
   if (event.eventType !== ViewerEventType.LAYER_EDIT_STATE_CHANGED) return;
+  drawingSketch = false;
   setImmediate(() => {
     if (!viewer) return;
     try { updateWkt(); }
@@ -224,6 +254,7 @@ function stop() {
   viewerWasVisible = false;
   viewerHiddenSince = 0;
   controlsReady = false;
+  drawingSketch = false;
   for (const key of Object.keys(layerIndexes)) layerIndexes[key] = -1;
   if (viewer) { try { viewer.close(); } catch { /* Native window may already be gone. */ } }
   viewer = null;
