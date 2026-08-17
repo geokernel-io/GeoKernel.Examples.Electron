@@ -80,6 +80,12 @@
     "crs-database": "electron . crs-database",
     "crs-by-authority": "electron . crs-by-authority",
     "on-the-fly-reproject": "electron . on-the-fly-reproject",
+    "alternative-routes": "electron . alternative-routes",
+    "multi-stop-route": "electron . multi-stop-route",
+    "shortest-route": "electron . shortest-route",
+    "route-animation": "electron . route-animation",
+    "isochrone": "electron . isochrone",
+    "route-optimization": "electron . route-optimization",
     "web-mercator": "electron . web-mercator",
     "wgs84-setup": "electron . wgs84-setup",
     "shapefile-load": "electron . shapefile-load",
@@ -140,7 +146,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "^1.1.59"
+    "geokernel-electron": "^1.2.7"
   },
   "devDependencies": {
     "electron": "^38.0.0"

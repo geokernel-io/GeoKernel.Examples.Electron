@@ -16,4 +16,5 @@ npm run minimap
 npm run measure
 npm run project
 npm run scalebar
+npm run isochrone
 ```

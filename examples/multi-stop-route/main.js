@@ -1,0 +1,47 @@
+"use strict";
+
+const fs = require("fs"); const path = require("path"); const { fork } = require("child_process"); const { app, BrowserWindow } = require("electron");
+const { ViewerEventType, ViewerTool, ViewerWindow, findBinDir } = require("geokernel-electron"); const { ensureSampleFile } = require("../common/sample-data");
+const SAMPLE_URL = "https://github.com/geokernel-io/GeoKernel.SampleData/releases/download/v1/stockholm.zip";
+const COMMAND = Object.freeze({ NEW: 1, CALCULATE: 2 }); const CONTROL = Object.freeze({ NEW: 1, CALCULATE: 2, LEG: 3, ROAD: 4 });
+let viewer = null; let keeperWindow = null; let eventPump = null; let worker = null; let visibleOnce = false; let hiddenSince = 0; let closing = false; let ready = false; let busy = false; let sequence = 0; let pending = 0;
+let stops = []; let stopNodes = []; let route = null; let legOptions = []; let roadOptions = []; let highlight = null;
+
+function verifyQtPlatformPlugin() { const binDir = findBinDir(); const candidates = [process.env.QT_QPA_PLATFORM_PLUGIN_PATH ? path.join(process.env.QT_QPA_PLATFORM_PLUGIN_PATH, "qwindows.dll") : null, path.join(binDir, "platforms", "qwindows.dll"), path.join(binDir, "plugins", "platforms", "qwindows.dll")].filter(Boolean); if (!candidates.some(fs.existsSync)) throw new Error(`Qt platform plugin is missing: ${binDir}`); }
+function setCalculateEnabled(value) { viewer.setCommandEnabled(COMMAND.CALCULATE, value); viewer.setControlEnabled(CONTROL.CALCULATE, value); }
+function setLists(legs, roads) { legOptions = legs; roadOptions = roads; viewer.setControlOptions(CONTROL.LEG, legs); viewer.setControlOptions(CONTROL.ROAD, roads); viewer.setControlEnabled(CONTROL.LEG, legs.length > 0); viewer.setControlEnabled(CONTROL.ROAD, roads.length > 0); }
+function appendUnique(target, points) { for (const point of points) { const last = target.at(-1); if (!last || last.x !== point.x || last.y !== point.y) target.push(point); } }
+function draw() {
+  if (!viewer) return; viewer.clearShapes();
+  if (route) { const geometry = []; route.legs.forEach((leg) => appendUnique(geometry, leg.geometry)); viewer.addPolylineShape(geometry, { lineColor: "#2563EB", lineOpacity: 255, lineWidth: 5 }); }
+  if (highlight?.length > 1) { viewer.addPolylineShape(highlight, { lineColor: "#FFD60A", lineOpacity: 210, lineWidth: 10 }); viewer.addPolylineShape(highlight, { lineColor: "#DC2626", lineOpacity: 255, lineWidth: 4 }); }
+  stops.forEach((point, index) => { const last = index === stops.length - 1; const fill = index === 0 ? "#22C55E" : last ? "#EF4444" : "#F59E0B"; const outline = index === 0 ? "#14532D" : last ? "#7F1D1D" : "#78350F"; viewer.addPointShape(point.x, point.y, { pointColor: fill, lineColor: outline, pointSize: 16, lineWidth: 2 }); viewer.addTextShape(point.x, point.y, String(index + 1), { textColor: "#FFFFFF", fontSize: 8, bold: true }); });
+  viewer.invalidateRenderCache(false, true); viewer.refreshLayers();
+}
+function resetRoute() { if (!ready || !viewer) return; stops = []; stopNodes = []; route = null; highlight = null; busy = false; viewer.clearLog(); setLists([], []); setCalculateEnabled(false); draw(); viewer.setTool(ViewerTool.ROUTE); viewer.setStatusText("Click the map to add the start point."); }
+function requestSelection(event) { if (!ready || busy || event.intValue !== ViewerTool.ROUTE) return; const world = viewer.screenToWorld(event.screenRectangle.left, event.screenRectangle.top); if (!world) return; busy = true; pending = ++sequence; viewer.setStatusText("Snapping the route stop..."); worker.send({ type: "select", id: pending, point: viewer.transformPoint(3857, 4326, world.x, world.y), lastNode: stopNodes.at(-1) ?? null }); }
+function calculate() { if (!ready || busy || stopNodes.length < 2) return; busy = true; pending = ++sequence; highlight = null; draw(); viewer.setStatusText("Calculating multi-stop route..."); worker.send({ type: "calculate", id: pending, stops: stopNodes }); }
+function showDirections() { viewer.clearLog(); viewer.appendLog(`${stops.length} stops\n${(route.distance / 1000).toFixed(2)} km  •  ${(route.time / 60).toFixed(1)} min\n`); route.steps.forEach((step, index) => { const value = step.distance >= 1000 ? `${(step.distance / 1000).toFixed(1)} km` : `${step.distance.toFixed(0)} m`; viewer.appendLog(`${index + 1}. ${step.name}\n    ${value}`); }); }
+function selectLeg(text) { const index = legOptions.indexOf(text); highlight = index >= 0 ? route?.legs[index]?.geometry ?? null : null; draw(); }
+function selectRoad(text) { const index = roadOptions.indexOf(text); highlight = index >= 0 ? route?.steps[index]?.geometry ?? null : null; draw(); }
+function handleWorker(message) {
+  if (!viewer || closing) return;
+  if (message.type === "ready") { ready = true; viewer.setCommandEnabled(COMMAND.NEW, true); viewer.setControlEnabled(CONTROL.NEW, true); resetRoute(); return; }
+  if (message.type === "error") { busy = false; viewer.setStatusText(message.message); console.error(message.message); return; }
+  if (message.id !== pending) return; busy = false;
+  if (message.type === "selection") { if (!message.snapped) { viewer.setStatusText("No reachable road node was found near this point."); return; } if (stopNodes.at(-1) === message.snapped.id) return; stopNodes.push(message.snapped.id); stops.push(message.snapped.world); route = null; highlight = null; viewer.clearLog(); setLists([], []); setCalculateEnabled(stops.length >= 2); draw(); viewer.setStatusText(`Stop ${stops.length} added. Add another stop or calculate the route.`); return; }
+  if (message.type === "route") { if (message.result.error) { viewer.setStatusText(message.result.error); return; } route = message.result; highlight = null; legOptions = route.legs.map((leg, index) => `${index + 1} → ${index + 2}   ${(leg.distance / 1000).toFixed(2)} km • ${(leg.time / 60).toFixed(1)} min`); roadOptions = route.steps.map((step, index) => { const value = step.distance >= 1000 ? `${(step.distance / 1000).toFixed(1)} km` : `${step.distance.toFixed(0)} m`; return `${index + 1}. ${step.name}  •  ${value}`; }); setLists(legOptions, roadOptions); showDirections(); draw(); viewer.setStatusText("Multi-stop route calculated successfully."); }
+}
+function onCommand(id) { setImmediate(() => { if (id === COMMAND.NEW) resetRoute(); else if (id === COMMAND.CALCULATE) calculate(); }); }
+function onControl(id, _number, text) { setImmediate(() => { if (id === CONTROL.NEW) resetRoute(); else if (id === CONTROL.CALCULATE) calculate(); else if (id === CONTROL.LEG) selectLeg(text); else if (id === CONTROL.ROAD) selectRoad(text); }); }
+function startEventPump() { eventPump = setInterval(() => { if (!viewer) return; viewer.processEvents(); if (viewer.isVisible()) { visibleOnce = true; hiddenSince = 0; } else if (visibleOnce) { if (!hiddenSince) hiddenSince = Date.now(); if (Date.now() - hiddenSince > 750) app.quit(); } }, 16); }
+async function start() {
+  closing = false; verifyQtPlatformPlugin(); keeperWindow = new BrowserWindow({ width: 1, height: 1, show: false, skipTaskbar: true, webPreferences: { sandbox: true } }); viewer = new ViewerWindow({ title: "MultiStopRoute", width: 1200, height: 760 });
+  viewer.addCommandToolbar([{ id: COMMAND.NEW, text: "New multi-stop route", enabled: false }, { id: COMMAND.CALCULATE, text: "Calculate route", enabled: false }], onCommand);
+  viewer.addControlPanel({ title: "Multi-stop route", area: "right", width: 320, controls: [{ id: CONTROL.NEW, type: "button", text: "New multi-stop route" }, { id: CONTROL.CALCULATE, type: "button", text: "Calculate route" }, { id: CONTROL.LEG, type: "combo", label: "Route legs", options: [], enabled: false }, { id: CONTROL.ROAD, type: "combo", label: "Road directions", options: [], enabled: false }] }, onControl);
+  viewer.setControlEnabled(CONTROL.NEW, false); viewer.setControlEnabled(CONTROL.CALCULATE, false); viewer.addLogPanel("Road directions"); viewer.setEventCallback((event) => { if (event.eventType === ViewerEventType.MAP_MOUSE_UP) setImmediate(() => requestSelection(event)); }); viewer.setTool(ViewerTool.PAN); viewer.setStatusText("Preparing Stockholm sample data..."); viewer.show(); viewer.processEvents(); startEventPump();
+  const shapefile = await ensureSampleFile(SAMPLE_URL, "stockholm.zip", "stockholm", "stockholm.shp"); if (!viewer) return; viewer.addLayer(shapefile); viewer.setLayerCoordinateSystemPreset(0, "EPSG:4326"); viewer.setCoordinateSystemPreset("EPSG:3857"); viewer.setLayerStyle(0, { lineColor: "#718684", lineWidth: 1 }); const extent = viewer.layerProjectedExtent(0); if (extent) viewer.setViewExtent(extent); viewer.setStatusText("Preparing routing graph...");
+  worker = fork(path.join(__dirname, "routing-worker.js"), [], { env: { ...process.env, ELECTRON_RUN_AS_NODE: "1", LOCALAPPDATA: path.join(app.getPath("temp"), "GeoKernelMultiStopRouteWorker") }, stdio: ["ignore", "pipe", "pipe", "ipc"] }); worker.stdout.on("data", (data) => process.stdout.write(data)); worker.stderr.on("data", (data) => process.stderr.write(data)); worker.on("message", handleWorker); worker.on("error", (error) => { viewer?.setStatusText(error.message); console.error(error.stack || error); }); worker.send({ type: "initialize", shapefile });
+}
+function stop() { closing = true; if (eventPump) clearInterval(eventPump); eventPump = null; worker?.kill(); worker = null; if (viewer) { try { viewer.close(); } catch { /* Native window may be gone. */ } } viewer = null; keeperWindow?.destroy(); keeperWindow = null; }
+module.exports = { start, stop };
