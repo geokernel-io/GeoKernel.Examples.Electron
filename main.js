@@ -12,6 +12,7 @@ const EXAMPLES = {
   "cloud-pmtiles-load": "./examples/cloud-pmtiles-load/main",
   "stac-cog-load": "./examples/stac-cog-load/main",
   "duckdb-geo-parquet-analytics": "./examples/duckdb-geo-parquet-analytics/main",
+  "analysis-geo-parquet-filter": "./examples/analysis-geo-parquet-filter/main",
   "add-layers": "./examples/add-layers/main",
   "hello-map": "./examples/hello-map/main",
   "layer-add-remove": "./examples/layer-add-remove/main",
