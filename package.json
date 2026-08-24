@@ -11,6 +11,8 @@
     "stac-cog-load": "electron . stac-cog-load",
     "duckdb-geo-parquet-analytics": "electron . duckdb-geo-parquet-analytics",
     "analysis-geo-parquet-filter": "electron . analysis-geo-parquet-filter",
+    "land-cover-inference": "electron . land-cover-inference",
+    "building-segmentation-inference": "electron . building-segmentation-inference",
     "add-layers": "electron . add-layers",
     "start": "npm run hello-map",
     "hello-map": "electron . hello-map",
@@ -151,7 +153,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.4.8"
+    "geokernel-electron": "1.5.14"
   },
   "devDependencies": {
     "electron": "^38.0.0"

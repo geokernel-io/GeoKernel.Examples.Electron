@@ -13,6 +13,8 @@ const EXAMPLES = {
   "stac-cog-load": "./examples/stac-cog-load/main",
   "duckdb-geo-parquet-analytics": "./examples/duckdb-geo-parquet-analytics/main",
   "analysis-geo-parquet-filter": "./examples/analysis-geo-parquet-filter/main",
+  "land-cover-inference": "./examples/land-cover-inference/main",
+  "building-segmentation-inference": "./examples/building-segmentation-inference/main",
   "add-layers": "./examples/add-layers/main",
   "hello-map": "./examples/hello-map/main",
   "layer-add-remove": "./examples/layer-add-remove/main",
