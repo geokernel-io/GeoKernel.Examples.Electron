@@ -13,6 +13,7 @@
     "analysis-geo-parquet-filter": "electron . analysis-geo-parquet-filter",
     "land-cover-inference": "electron . land-cover-inference",
     "building-segmentation-inference": "electron . building-segmentation-inference",
+    "object-detection-inference": "electron . object-detection-inference",
     "add-layers": "electron . add-layers",
     "start": "npm run hello-map",
     "hello-map": "electron . hello-map",

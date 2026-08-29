@@ -15,6 +15,7 @@ const EXAMPLES = {
   "analysis-geo-parquet-filter": "./examples/analysis-geo-parquet-filter/main",
   "land-cover-inference": "./examples/land-cover-inference/main",
   "building-segmentation-inference": "./examples/building-segmentation-inference/main",
+  "object-detection-inference": "./examples/object-detection-inference/main",
   "add-layers": "./examples/add-layers/main",
   "hello-map": "./examples/hello-map/main",
   "layer-add-remove": "./examples/layer-add-remove/main",

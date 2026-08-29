@@ -4,17 +4,15 @@ const fs = require("fs");
 const path = require("path");
 const { app, BrowserWindow, dialog } = require("electron");
 const { AnalysisExecutor, ViewerEventType, ViewerTool, ViewerWindow } = require("geokernel-electron");
+const { ensureSampleFile } = require("../common/sample-data");
 
-const DATA_ROOT = "D:\\projects\\GeoKernel Datasets\\BuildingSegmentation";
-const DEFAULT_MODEL = path.join(DATA_ROOT, "Models", "Dinov3sBuildings");
-const DEFAULT_RASTER = path.join(DATA_ROOT, "naip_rgb_train_tile1.tif");
+const RASTER_URL = "https://github.com/geokernel-io/GeoKernel.SampleData/releases/download/v1/buildings.zip";
+const MODEL_URL = "https://github.com/geokernel-io/GeoKernel.SampleData/releases/download/v1/buildings-model.zip";
 const CONTROL = { MODEL: 1, MODEL_BROWSE: 2, RASTER: 3, RASTER_BROWSE: 4, LABELS: 5, LABELS_BROWSE: 6, PROVIDER: 7, RUN: 8, PROGRESS: 9, STAGE: 10 };
 
 let viewer = null; let keeper = null; let eventPump = null; let analysis = null; let predictionLayer = null;
 let visibleOnce = false; let hiddenSince = 0; let busy = false; let closing = false;
-let modelPath = fs.existsSync(DEFAULT_MODEL) ? DEFAULT_MODEL : "";
-let rasterPath = fs.existsSync(DEFAULT_RASTER) ? DEFAULT_RASTER : "";
-let labelPath = rasterPath ? labelsFor(rasterPath) : ""; let provider = "Auto";
+let modelPath = ""; let rasterPath = ""; let labelPath = ""; let provider = "Auto";
 
 function labelsFor(value) { const parsed = path.parse(value); return path.join(parsed.dir, `${parsed.name}_building_instances.tif`); }
 function setProgress(value, text) {
@@ -62,7 +60,7 @@ async function browseModel() {
 }
 async function browseRaster() {
   const result = await dialog.showOpenDialog({ title: "Select input raster", defaultPath: rasterPath || undefined, properties: ["openFile"], filters: [{ name: "GeoTIFF", extensions: ["tif", "tiff"] }] });
-  if (!result.canceled && result.filePaths[0]) { rasterPath = result.filePaths[0]; labelPath = labelsFor(rasterPath); viewer?.setControlValue(CONTROL.RASTER, rasterPath); viewer?.setControlValue(CONTROL.LABELS, labelPath); }
+  if (!result.canceled && result.filePaths[0]) { rasterPath = result.filePaths[0]; labelPath = labelsFor(rasterPath); viewer?.setControlValue(CONTROL.RASTER, rasterPath); viewer?.setControlValue(CONTROL.LABELS, labelPath); openBaseRaster(); }
 }
 async function browseLabels() {
   const result = await dialog.showSaveDialog({ title: "Save instance labels", defaultPath: labelPath || undefined, filters: [{ name: "GeoTIFF", extensions: ["tif"] }] });
@@ -73,6 +71,21 @@ function controlChanged(id, _numericValue, textValue) {
   else if (id === CONTROL.LABELS) labelPath = textValue || ""; else if (id === CONTROL.PROVIDER) provider = textValue || "Auto";
   else if (id === CONTROL.MODEL_BROWSE) setImmediate(browseModel); else if (id === CONTROL.RASTER_BROWSE) setImmediate(browseRaster);
   else if (id === CONTROL.LABELS_BROWSE) setImmediate(browseLabels); else if (id === CONTROL.RUN) setImmediate(run);
+}
+function openBaseRaster() {
+  predictionLayer?.close(); predictionLayer = null; viewer.clearLayers(); viewer.addLayerFile(rasterPath);
+  viewer.setLayerName(0, "Buildings RGB source"); viewer.refreshLayers(); viewer.fullExtent();
+}
+async function prepareSamples() {
+  try {
+    setRunning(true); setProgress(5, "Preparing buildings sample data...");
+    rasterPath = await ensureSampleFile(RASTER_URL, "buildings.zip", "buildings", "buildings.tif");
+    const manifest = await ensureSampleFile(MODEL_URL, "buildings-model.zip", "buildings-model", "geokernel-model.json");
+    modelPath = path.dirname(manifest); labelPath = labelsFor(rasterPath);
+    viewer.setControlValue(CONTROL.MODEL, modelPath); viewer.setControlValue(CONTROL.RASTER, rasterPath); viewer.setControlValue(CONTROL.LABELS, labelPath);
+    openBaseRaster(); viewer.clearLog(); viewer.appendLog("The buildings raster and ONNX model package are ready. Run inference to add building polygons.");
+    setRunning(false); setProgress(0, "Ready");
+  } catch (error) { fail(error?.message || String(error)); }
 }
 function startPump() {
   eventPump = setInterval(() => { if (!viewer) return; viewer.processEvents(); if (viewer.isVisible()) { visibleOnce = true; hiddenSince = 0; }
@@ -94,7 +107,7 @@ async function start() {
   viewer.addLogPanel("Inference diagnostics"); viewer.appendLog("Select a model package and an input raster."); viewer.setTool(ViewerTool.PAN);
   viewer.setEventCallback((event) => { if (event.eventType === ViewerEventType.DRAWING_PROGRESS_CHANGED && !busy) setProgress(event.intValue, event.text || "Rendering map...");
     else if (event.eventType === ViewerEventType.BUSY_CHANGED && !busy) setProgress(event.intValue ? 0 : 100, event.intValue ? "Rendering map..." : "Map ready"); });
-  viewer.show(); viewer.processEvents(); startPump();
+  viewer.show(); viewer.processEvents(); startPump(); setImmediate(prepareSamples);
 }
 function stop() {
   closing = true; if (eventPump) clearInterval(eventPump); eventPump = null; predictionLayer?.close(); predictionLayer = null;

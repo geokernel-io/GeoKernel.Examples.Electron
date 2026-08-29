@@ -22,7 +22,7 @@ const CONTROL = { MODEL: 1, MODEL_BROWSE: 2, RASTER: 3, RASTER_BROWSE: 4, OUTPUT
 let viewer = null; let keeper = null; let worker = null; let eventPump = null;
 let visibleOnce = false; let hiddenSince = 0; let closing = false; let busy = false; let sequence = 0;
 let modelPath = ""; let rasterPath = ""; let outputPath = ""; let provider = "auto";
-let predictionLayerIndex = -1; let predictionOpacity = 100;
+let predictionLayerIndex = -1; let predictionOpacity = 50;
 
 function outputFor(value) {
   const parsed = path.parse(value); const stamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
@@ -83,7 +83,7 @@ function workerMessage(message) {
   try {
     const preview = previewFor(outputPath); setProgress(95, "Opening color preview...");
     viewer.removeLayerByName("Land-cover prediction"); viewer.addLayerFile(preview);
-    predictionLayerIndex = 1; viewer.setLayerName(predictionLayerIndex, "Land-cover prediction");
+    predictionLayerIndex = 0; viewer.setLayerName(predictionLayerIndex, "Land-cover prediction");
     viewer.setLayerOpacity(predictionLayerIndex, predictionOpacity / 100.0);
     viewer.refreshLayers(); viewer.clearLog(); viewer.appendLog(diagnostics(message.result, preview));
     setRunning(false); setProgress(100, "Inference complete");
@@ -162,7 +162,7 @@ async function start() {
     { id: CONTROL.OUTPUT, type: "text", label: "Class mask", value: outputPath },
     { id: CONTROL.OUTPUT_BROWSE, type: "button", text: "Browse class mask..." },
     { id: CONTROL.PROVIDER, type: "combo", label: "Execution provider", options: ["Auto", "CPU", "CUDA", "DirectML"], value: "Auto" },
-    { id: CONTROL.OPACITY, type: "number", label: "Prediction opacity", value: 100, minimum: 0, maximum: 100, step: 5, decimals: 0, suffix: "%" },
+    { id: CONTROL.OPACITY, type: "number", label: "Prediction opacity", value: 50, minimum: 0, maximum: 100, step: 5, decimals: 0, suffix: "%" },
     { id: CONTROL.RUN, type: "button", text: "Run land-cover inference" },
     { id: CONTROL.PROGRESS, type: "progress", label: "Progress", value: 0, textVisible: true, format: "%p%" },
     { id: CONTROL.STAGE, type: "text", label: "Stage", value: "Ready.", readOnly: true },
