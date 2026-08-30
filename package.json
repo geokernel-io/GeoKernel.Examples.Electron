@@ -10,6 +10,7 @@
     "cloud-pmtiles-load": "electron . cloud-pmtiles-load",
     "stac-cog-load": "electron . stac-cog-load",
     "duckdb-geo-parquet-analytics": "electron . duckdb-geo-parquet-analytics",
+    "geo-parquet-write": "electron . geo-parquet-write",
     "analysis-geo-parquet-filter": "electron . analysis-geo-parquet-filter",
     "land-cover-inference": "electron . land-cover-inference",
     "building-segmentation-inference": "electron . building-segmentation-inference",
