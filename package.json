@@ -151,11 +151,14 @@
     "shape-centroid": "electron . shape-centroid",
     "tolerance-config": "electron . tolerance-config",
     "topology-batch": "electron . topology-batch",
-    "topology": "electron . topology"
+    "topology": "electron . topology",
+    "terrain-loading": "electron . terrain-loading",
+    "terrain-and-imagery": "electron . terrain-and-imagery"
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.5.14"
+    "geokernel-electron": "1.5.30",
+    "koffi": "2.16.2"
   },
   "devDependencies": {
     "electron": "^38.0.0"
