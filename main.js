@@ -8,6 +8,7 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "camera-navigation": "./examples/camera-navigation/main",
   "terrain-and-imagery": "./examples/terrain-and-imagery/main",
   "terrain-loading": "./examples/terrain-loading/main",
   "cloud-geo-parquet-load": "./examples/cloud-geo-parquet-load/main",
