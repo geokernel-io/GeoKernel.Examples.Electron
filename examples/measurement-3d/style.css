@@ -1,0 +1,4 @@
+#result { white-space: pre-line; }
+.points { max-height: 220px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th, td { padding: 4px; text-align: right; border-bottom: 1px solid #ccc; }

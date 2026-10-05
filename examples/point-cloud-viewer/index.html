@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+  <title>PointCloudViewer — GeoKernel</title>
+  <link rel="stylesheet" href="../buildings-3d/style.css">
+</head>
+<body>
+  <aside>
+    <h1>EuroSDR P4 — 40 × 40 m crop</h1>
+    <label for="colors">Colour</label>
+    <select id="colors" disabled><option value="rgb">RGB</option><option value="height">Height</option></select>
+    <label for="samples">Sample limit</label>
+    <select id="samples"><option value="50000">50,000</option><option value="100000">100,000</option><option value="250000" selected>250,000</option></select>
+    <button id="reload">Load / apply sample limit</button>
+    <button id="cancel" disabled>Cancel loading</button>
+    <p id="details">No points loaded.</p>
+    <p id="errors" role="alert"></p>
+    <button id="reset" disabled>Reset view</button>
+    <p>Local normalized preview. Source coordinates remain EPSG:32630; heights are provisional. Display is sampled up to 250,000 points. Source points are preserved. Point size: 1 pixel (SDK fixed).</p>
+    <p>Left drag: pan<br>Wheel/right drag: zoom<br>Middle/Ctrl+left drag: orbit<br>Shift+left drag: look</p>
+    <progress id="progress"></progress>
+    <p id="status" role="status">Preparing sample…</p>
+  </aside>
+  <script src="renderer.js"></script>
+</body>
+</html>

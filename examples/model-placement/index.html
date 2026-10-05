@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+  <title>ModelPlacement — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside>
+    <h1>Sagrada Família — textured model</h1>
+    <label for="quality">Terrain mesh</label>
+    <select id="quality"><option value="256">256 — Fast</option><option value="512" selected>512 — Balanced</option><option value="1024">1024 — Detailed</option></select>
+    <label for="longitude">Longitude</label>
+    <input id="longitude" type="number" min="-180" max="180" step="any" value="2.174401283" required>
+    <label for="latitude">Latitude</label>
+    <input id="latitude" type="number" min="-90" max="90" step="any" value="41.403605046" required>
+    <label for="offset">Above terrain (m)</label>
+    <input id="offset" type="number" min="-500" max="1000" step="any" value="2.938" required>
+    <label for="heading">Heading (degrees)</label>
+    <input id="heading" type="number" min="-180" max="180" step="any" value="0.2373346" required>
+    <label for="pitch">Pitch (degrees)</label>
+    <input id="pitch" type="number" min="-180" max="180" step="any" value="0" required>
+    <label for="roll">Roll (degrees)</label>
+    <input id="roll" type="number" min="-180" max="180" step="any" value="0" required>
+    <label for="scale">Scale</label>
+    <input id="scale" type="number" min="0.01" max="100" step="any" value="0.958139" required>
+    <button id="reload">Apply placement / Reload</button>
+    <button id="cancel" disabled>Cancel loading</button>
+    <label><input id="imagery" type="checkbox" checked> Show orthophoto</label>
+    <label><input id="visible" type="checkbox" checked disabled> Show model</label>
+    <button id="focus" disabled>Focus model</button>
+    <label for="height">Vertical exaggeration</label>
+    <input id="height" type="number" min="0.25" max="10" step="0.25" value="1">
+    <p>Approximate demo placement; not a surveyed fit. Height is an offset above terrain at the model anchor. DEM uses EGM08D595 geoid correction. Textures are retained.</p>
+    <p>Model: PeeJaa — La Sagrada Familia. Source and license: downloaded model/license.txt.</p>
+    <p>Left drag: pan<br>Wheel / right drag: zoom<br>Middle / Ctrl + left drag: orbit</p>
+    <button id="reset">Reset view</button>
+    <progress id="progress"></progress>
+    <p id="status" role="status">Preparing terrain…</p>
+  </aside>
+  <script src="renderer.js"></script>
+</body>
+</html>

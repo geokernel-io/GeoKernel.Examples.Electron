@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+  <title>Measurement3D — GeoKernel</title>
+  <link rel="stylesheet" href="../buildings-3d/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside>
+    <h1>Sagrada Família — terrain measurements</h1>
+    <button id="reload">Reload sample</button>
+    <button id="cancel" disabled>Cancel loading</button>
+    <label><input id="imagery" type="checkbox" checked disabled> Show orthophoto</label>
+    <p>Enable Add points, then click terrain. Dragging still navigates. Area closes automatically after three points.</p>
+    <select id="mode" aria-label="Measurement mode" disabled>
+      <option value="distance">Distance / polyline</option><option value="area">Area / polygon</option>
+    </select>
+    <label><input id="capture" type="checkbox" checked disabled> Add points on click</label>
+    <button id="finish" disabled>Finish measurement</button>
+    <button id="undo" disabled>Undo last point</button>
+    <button id="clear" disabled>Clear measurement</button>
+    <p id="result">Load terrain to start measuring.</p>
+    <div class="points"><table><thead><tr><th>East (m)</th><th>North (m)</th><th>Up (m)</th></tr></thead><tbody id="points"></tbody></table></div>
+    <label for="height">Vertical exaggeration</label>
+    <input id="height" type="number" min="0.25" max="10" step="0.25" value="1" required disabled>
+    <button id="reset" disabled>Reset view</button>
+    <p>Local ENU metres. 3D length joins points with straight segments, not along terrain. Area is horizontal plan area, not surface area. Exaggeration does not change results. DEM datum is unverified.</p>
+    <p>Left drag: pan<br>Wheel/right drag: zoom<br>Middle/Ctrl+left drag: orbit</p>
+    <progress id="progress"></progress>
+    <p id="status" role="status">Preparing sample…</p>
+  </aside>
+  <script src="renderer.js"></script>
+</body>
+</html>

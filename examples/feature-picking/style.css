@@ -1,0 +1,2 @@
+table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 12px; }
+th, td { padding: 5px; border-bottom: 1px solid #ccc; text-align: left; overflow-wrap: anywhere; }

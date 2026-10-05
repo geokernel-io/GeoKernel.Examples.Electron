@@ -4,7 +4,7 @@ const path = require("path");
 const koffi = require("koffi");
 const { createNativeLibrary, findBinDir } = require("geokernel-electron");
 
-// The 1.5.30 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
+// The 1.5.31 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
 class TerrainViewer {
   constructor(parent) {
     if (process.platform !== "win32") throw new Error("TerrainLoading requires Windows x64.");

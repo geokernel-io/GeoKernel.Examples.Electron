@@ -1,0 +1,2 @@
+#result { white-space: pre-line; }
+#chart { position: absolute; left: 280px; bottom: 0; width: calc(100% - 280px); height: 240px; background: white; }

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+  <title>TerrainAnalysis — GeoKernel</title>
+  <link rel="stylesheet" href="../terrain-loading/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside>
+    <h1>Sagrada Família — sample terrain</h1>
+    <p>Slope and aspect describe the loaded terrain mesh, not an exported analysis raster. Mesh resolution affects results. Heights have an unverified vertical reference.</p>
+    <button id="reload">Reload sample</button>
+    <button id="cancel" disabled>Cancel loading</button>
+    <label for="quality">Mesh samples per side</label>
+    <select id="quality"><option value="256">256 — Fast</option><option value="512" selected>512 — Balanced</option><option value="1024">1024 — Detailed</option></select>
+    <label for="mode">Display</label>
+    <select id="mode"><option value="0">Terrain relief</option><option value="1" selected>Slope (degrees)</option><option value="2">Aspect (downhill direction)</option></select>
+    <div id="legend" aria-label="Colour legend"></div>
+    <p>Analysis uses terrain mesh faces before vertical exaggeration. Aspect is clockwise from north in the local ENU frame.</p>
+    <label for="height">Vertical exaggeration</label>
+    <input id="height" type="number" min="0.25" max="10" step="0.25" value="1" required>
+    <p id="info">No terrain loaded.</p>
+    <button id="reset">Reset view</button>
+    <p>Left drag: pan<br>Wheel/right drag: zoom<br>Middle/Ctrl+left drag: orbit<br>Shift+left drag: look</p>
+    <progress id="progress"></progress>
+    <p id="status" role="status">Preparing terrain…</p>
+  </aside>
+  <script src="renderer.js"></script>
+</body>
+</html>

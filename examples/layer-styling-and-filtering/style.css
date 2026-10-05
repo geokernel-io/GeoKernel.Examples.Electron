@@ -1,0 +1,10 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #090f16; font: 13px "Segoe UI", sans-serif; }
+aside { position: absolute; inset: 0 auto 0 0; width: 280px; padding: 16px; overflow-y: auto; background: #f0f0f0; color: #111; }
+h3 { margin: 0 0 16px; }
+button, select, input:not([type="checkbox"]) { width: 100%; margin: 5px 0; padding: 6px; }
+input[type="color"] { height: 36px; }
+label { display: block; margin-top: 8px; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+p { line-height: 1.45; overflow-wrap: anywhere; }
+#counts { white-space: pre-line; }

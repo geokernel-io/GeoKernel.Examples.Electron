@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+  <title>FeaturePicking — GeoKernel</title>
+  <link rel="stylesheet" href="../buildings-3d/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside>
+    <h1>Sagrada Família — feature picking</h1>
+    <p>Click a building or road to inspect its attributes. Drag to navigate.</p>
+    <button id="reload">Reload sample</button>
+    <button id="cancel" disabled>Cancel loading</button>
+    <label><input id="imagery" type="checkbox" checked disabled> Show orthophoto</label>
+    <label><input id="buildings" type="checkbox" checked disabled> Show buildings</label>
+    <label><input id="roads" type="checkbox" checked disabled> Show roads</label>
+    <label><input id="multiple" type="checkbox" disabled> Multiple selection (click to add/remove)</label>
+    <p id="count">No selection</p>
+    <select id="selected" aria-label="Active selection" disabled></select>
+    <table><thead><tr><th>Property</th><th>Value</th></tr></thead><tbody id="attributes"></tbody></table>
+    <button id="focus" disabled>Zoom to selection</button>
+    <button id="clear" disabled>Clear selection</button>
+    <label for="height">Vertical exaggeration</label>
+    <input id="height" type="number" min="0.25" max="10" step="0.25" value="1" required disabled>
+    <button id="reset" disabled>Reset view</button>
+    <p>Building heights are illustrative (9 m). DEM heights are metres; the vertical datum is unverified.</p>
+    <p>Left drag: pan<br>Wheel/right drag: zoom<br>Middle/Ctrl+left drag: orbit</p>
+    <progress id="progress"></progress>
+    <p id="status" role="status">Preparing sample…</p>
+  </aside>
+  <script src="renderer.js"></script>
+</body>
+</html>

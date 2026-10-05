@@ -6,6 +6,15 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
+    "project-save-load": "electron . project-save-load",
+    "layer-styling-and-filtering": "electron . layer-styling-and-filtering",
+    "terrain-analysis": "electron . terrain-analysis",
+    "point-cloud-viewer": "electron . point-cloud-viewer",
+    "tiles-3d-streaming": "electron . tiles-3d-streaming",
+    "viewshed-analysis": "electron . viewshed-analysis",
+    "elevation-profile": "electron . elevation-profile",
+    "measurement-3d": "electron . measurement-3d",
+    "feature-picking": "electron . feature-picking",
     "cloud-geo-parquet-load": "electron . cloud-geo-parquet-load",
     "cloud-pmtiles-load": "electron . cloud-pmtiles-load",
     "stac-cog-load": "electron . stac-cog-load",
@@ -154,11 +163,14 @@
     "topology": "electron . topology",
     "terrain-loading": "electron . terrain-loading",
     "terrain-and-imagery": "electron . terrain-and-imagery",
-    "camera-navigation": "electron . camera-navigation"
+    "camera-navigation": "electron . camera-navigation",
+    "roads-on-terrain": "electron . roads-on-terrain",
+    "buildings-3d": "electron . buildings-3d",
+    "model-placement": "electron . model-placement"
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.5.30",
+    "geokernel-electron": "1.5.32",
     "koffi": "2.16.2"
   },
   "devDependencies": {

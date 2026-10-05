@@ -6,12 +6,12 @@ const { createNativeLibrary, findBinDir } = require("geokernel-electron");
 
 // The 1.5.31 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
 class TerrainViewer {
-  constructor(parent) {
-    if (process.platform !== "win32") throw new Error("CameraNavigation requires Windows x64.");
+  constructor(parent, { libraryPath, extraSignatures = {}, createFunction = "Create" } = {}) {
+    if (process.platform !== "win32") throw new Error("Buildings3D requires Windows x64.");
     this.runtime = createNativeLibrary();
     this.pump = this.runtime.getFunction("GeoKernelViewer_ProcessEvents");
     this.pump();
-    const library = path.join(findBinDir(), "GeoKernel.Viewer3D.dll");
+    const library = libraryPath ? path.resolve(libraryPath) : path.join(findBinDir(), "GeoKernel.Viewer3D.dll");
     this.library = koffi.load(library);
     this.api = {};
     const signatures = {
@@ -19,22 +19,22 @@ class TerrainViewer {
       Destroy: ["void", ["void *"]],
       LastError: ["str", []],
       Resize: ["int", ["void *", "int", "int"]],
-      LoadTerrainAndImagery: ["int", ["void *", "str", "str", "int"]],
+      LoadBuildingsOnTerrain: ["int", ["void *", "str", "str", "str", "float", "int"]],
+      SetBuildingStyle: ["int", ["void *", "int", "float", "int", "int", "int"]],
+      GetBuildingVertexCount: ["int", ["void *", koffi.out(koffi.pointer("uint64"))]],
       SetImageryVisible: ["int", ["void *", "int"]],
       PollLoad: ["int", ["void *"]],
       CancelLoad: ["void", ["void *"]],
       SetColorRamp: ["int", ["void *", "int"]],
       SetHeightScale: ["int", ["void *", "float"]],
-      GetCamera: ["int", ["void *", koffi.out(koffi.pointer("float"))]],
-      MoveCamera: ["int", ["void *", "float *", "int"]],
-      StopCamera: ["int", ["void *"]],
       ResetCamera: ["int", ["void *"]],
+      ...extraSignatures,
     };
     for (const [name, [result, args]] of Object.entries(signatures)) {
       try {
         this.api[name] = this.library.func("GeoKernel3D_" + name, result, args);
       } catch (error) {
-        throw new Error(`The selected Viewer3D DLL lacks ${name}: ${library}. Install geokernel-electron@1.5.31.`, { cause: error });
+        throw new Error(`The selected Viewer3D DLL lacks ${name}: ${library}. Use an SDK build containing this API.`, { cause: error });
       }
     }
     const user32 = koffi.load("user32.dll");
@@ -44,7 +44,7 @@ class TerrainViewer {
     this.destroyHost = user32.func("bool __stdcall DestroyWindow(void *)");
     this.host = this.createHost(0, "STATIC", "", 0x56000000, 0, 0, 1, 1, parent, null, null, null);
     if (!this.host) throw new Error("Cannot create the terrain host window.");
-    this.handle = this.api.Create(this.host);
+    this.handle = this.api[createFunction](this.host);
     if (!this.handle) {
       const error = this.api.LastError();
       this.destroyHost(this.host);
@@ -72,7 +72,27 @@ class TerrainViewer {
     this.check(this.api.Resize(this.handle, w, h));
   }
 
-  load(file, imagery, resolution) { this.check(this.api.LoadTerrainAndImagery(this.handle, file, imagery, resolution)); }
+  load(file, imagery, buildings, buildingHeight, resolution) {
+    if (!Number.isFinite(buildingHeight) || buildingHeight < 1 || buildingHeight > 300) {
+      throw new Error("Building height must be between 1 and 300 metres.");
+    }
+    this.check(this.api.LoadBuildingsOnTerrain(this.handle, file, imagery, buildings, buildingHeight, resolution));
+  }
+
+  buildingStyle(visible, opacity, color) {
+    if (typeof visible !== "boolean" || !Number.isFinite(opacity) || opacity < 0 || opacity > 1 ||
+        typeof color !== "string" || !/^#[0-9a-f]{6}$/i.test(color)) {
+      throw new Error("Invalid building style.");
+    }
+    const rgb = [1, 3, 5].map((offset) => parseInt(color.slice(offset, offset + 2), 16));
+    this.check(this.api.SetBuildingStyle(this.handle, visible ? 1 : 0, opacity, ...rgb));
+  }
+
+  buildingVertexCount() {
+    const count = [0];
+    this.check(this.api.GetBuildingVertexCount(this.handle, count));
+    return Number(count[0]);
+  }
   imagery(visible) { this.check(this.api.SetImageryVisible(this.handle, visible ? 1 : 0)); }
   poll() {
     const state = this.api.PollLoad(this.handle);
@@ -82,10 +102,6 @@ class TerrainViewer {
   ramp(value) { this.check(this.api.SetColorRamp(this.handle, value)); }
   height(value) { this.check(this.api.SetHeightScale(this.handle, value)); }
   reset() { this.check(this.api.ResetCamera(this.handle)); }
-
-  camera() { const values = new Float32Array(6); this.check(this.api.GetCamera(this.handle, values)); return Array.from(values); }
-  moveCamera(values, duration) { this.check(this.api.MoveCamera(this.handle, values, duration)); }
-  stopCamera() { this.check(this.api.StopCamera(this.handle)); }
 
   close() {
     if (this.handle) this.api.Destroy(this.handle);

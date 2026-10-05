@@ -7,7 +7,7 @@ const { createNativeLibrary, findBinDir } = require("geokernel-electron");
 // The 1.5.31 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
 class TerrainViewer {
   constructor(parent) {
-    if (process.platform !== "win32") throw new Error("CameraNavigation requires Windows x64.");
+    if (process.platform !== "win32") throw new Error("RoadsOnTerrain requires Windows x64.");
     this.runtime = createNativeLibrary();
     this.pump = this.runtime.getFunction("GeoKernelViewer_ProcessEvents");
     this.pump();
@@ -19,15 +19,14 @@ class TerrainViewer {
       Destroy: ["void", ["void *"]],
       LastError: ["str", []],
       Resize: ["int", ["void *", "int", "int"]],
-      LoadTerrainAndImagery: ["int", ["void *", "str", "str", "int"]],
+      LoadRoadsOnTerrain: ["int", ["void *", "str", "str", "str", "int"]],
+      SetRoadStyle: ["int", ["void *", "int", "float", "int", "int", "int"]],
+      GetRoadVertexCount: ["int", ["void *", koffi.out(koffi.pointer("uint64"))]],
       SetImageryVisible: ["int", ["void *", "int"]],
       PollLoad: ["int", ["void *"]],
       CancelLoad: ["void", ["void *"]],
       SetColorRamp: ["int", ["void *", "int"]],
       SetHeightScale: ["int", ["void *", "float"]],
-      GetCamera: ["int", ["void *", koffi.out(koffi.pointer("float"))]],
-      MoveCamera: ["int", ["void *", "float *", "int"]],
-      StopCamera: ["int", ["void *"]],
       ResetCamera: ["int", ["void *"]],
     };
     for (const [name, [result, args]] of Object.entries(signatures)) {
@@ -72,7 +71,24 @@ class TerrainViewer {
     this.check(this.api.Resize(this.handle, w, h));
   }
 
-  load(file, imagery, resolution) { this.check(this.api.LoadTerrainAndImagery(this.handle, file, imagery, resolution)); }
+  load(file, imagery, roads, resolution) {
+    this.check(this.api.LoadRoadsOnTerrain(this.handle, file, imagery, roads, resolution));
+  }
+
+  roadStyle(visible, opacity, color) {
+    if (typeof visible !== "boolean" || !Number.isFinite(opacity) || opacity < 0 || opacity > 1 ||
+        typeof color !== "string" || !/^#[0-9a-f]{6}$/i.test(color)) {
+      throw new Error("Invalid road style.");
+    }
+    const rgb = [1, 3, 5].map((offset) => parseInt(color.slice(offset, offset + 2), 16));
+    this.check(this.api.SetRoadStyle(this.handle, visible ? 1 : 0, opacity, ...rgb));
+  }
+
+  roadVertexCount() {
+    const count = [0];
+    this.check(this.api.GetRoadVertexCount(this.handle, count));
+    return Number(count[0]);
+  }
   imagery(visible) { this.check(this.api.SetImageryVisible(this.handle, visible ? 1 : 0)); }
   poll() {
     const state = this.api.PollLoad(this.handle);
@@ -82,10 +98,6 @@ class TerrainViewer {
   ramp(value) { this.check(this.api.SetColorRamp(this.handle, value)); }
   height(value) { this.check(this.api.SetHeightScale(this.handle, value)); }
   reset() { this.check(this.api.ResetCamera(this.handle)); }
-
-  camera() { const values = new Float32Array(6); this.check(this.api.GetCamera(this.handle, values)); return Array.from(values); }
-  moveCamera(values, duration) { this.check(this.api.MoveCamera(this.handle, values, duration)); }
-  stopCamera() { this.check(this.api.StopCamera(this.handle)); }
 
   close() {
     if (this.handle) this.api.Destroy(this.handle);

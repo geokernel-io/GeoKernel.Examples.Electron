@@ -7,7 +7,7 @@ const { createNativeLibrary, findBinDir } = require("geokernel-electron");
 // The 1.5.31 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
 class TerrainViewer {
   constructor(parent) {
-    if (process.platform !== "win32") throw new Error("CameraNavigation requires Windows x64.");
+    if (process.platform !== "win32") throw new Error("ModelPlacement requires Windows x64.");
     this.runtime = createNativeLibrary();
     this.pump = this.runtime.getFunction("GeoKernelViewer_ProcessEvents");
     this.pump();
@@ -19,15 +19,15 @@ class TerrainViewer {
       Destroy: ["void", ["void *"]],
       LastError: ["str", []],
       Resize: ["int", ["void *", "int", "int"]],
-      LoadTerrainAndImagery: ["int", ["void *", "str", "str", "int"]],
+      LoadModelOnTerrain: ["int", ["void *", "str", "str", "str", "str", koffi.pointer("double"), "int"]],
+      SetModelVisible: ["int", ["void *", "int"]],
+      FocusModel: ["int", ["void *"]],
+      GetModelVertexCount: ["int", ["void *", koffi.out(koffi.pointer("uint64"))]],
       SetImageryVisible: ["int", ["void *", "int"]],
       PollLoad: ["int", ["void *"]],
       CancelLoad: ["void", ["void *"]],
       SetColorRamp: ["int", ["void *", "int"]],
       SetHeightScale: ["int", ["void *", "float"]],
-      GetCamera: ["int", ["void *", koffi.out(koffi.pointer("float"))]],
-      MoveCamera: ["int", ["void *", "float *", "int"]],
-      StopCamera: ["int", ["void *"]],
       ResetCamera: ["int", ["void *"]],
     };
     for (const [name, [result, args]] of Object.entries(signatures)) {
@@ -72,7 +72,19 @@ class TerrainViewer {
     this.check(this.api.Resize(this.handle, w, h));
   }
 
-  load(file, imagery, resolution) { this.check(this.api.LoadTerrainAndImagery(this.handle, file, imagery, resolution)); }
+  load(file, imagery, model, geoid, placement, resolution) {
+    if (!Array.isArray(placement) || placement.length !== 7 || !placement.every(Number.isFinite)) {
+      throw new Error("Specify seven finite placement values.");
+    }
+    this.check(this.api.LoadModelOnTerrain(this.handle, file, imagery, model, geoid, placement, resolution));
+  }
+  modelVisible(visible) { this.check(this.api.SetModelVisible(this.handle, visible ? 1 : 0)); }
+  focusModel() { this.check(this.api.FocusModel(this.handle)); }
+  modelVertexCount() {
+    const count = [0];
+    this.check(this.api.GetModelVertexCount(this.handle, count));
+    return Number(count[0]);
+  }
   imagery(visible) { this.check(this.api.SetImageryVisible(this.handle, visible ? 1 : 0)); }
   poll() {
     const state = this.api.PollLoad(this.handle);
@@ -82,10 +94,6 @@ class TerrainViewer {
   ramp(value) { this.check(this.api.SetColorRamp(this.handle, value)); }
   height(value) { this.check(this.api.SetHeightScale(this.handle, value)); }
   reset() { this.check(this.api.ResetCamera(this.handle)); }
-
-  camera() { const values = new Float32Array(6); this.check(this.api.GetCamera(this.handle, values)); return Array.from(values); }
-  moveCamera(values, duration) { this.check(this.api.MoveCamera(this.handle, values, duration)); }
-  stopCamera() { this.check(this.api.StopCamera(this.handle)); }
 
   close() {
     if (this.handle) this.api.Destroy(this.handle);

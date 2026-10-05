@@ -1,0 +1,14 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #090f16; font: 13px "Segoe UI", sans-serif; }
+aside { width: 280px; height: 100vh; padding: 16px; overflow-y: auto; background: #f0f0f0; }
+h1 { font-size: 15px; margin: 0 0 18px; }
+label { display: block; margin: 14px 0 6px; }
+select, input, button, progress { width: 100%; padding: 6px; }
+button { margin-top: 8px; cursor: pointer; }
+button:disabled { cursor: default; }
+p { line-height: 1.5; }
+progress { margin-top: 14px; }
+
+input[type="checkbox"] { width: auto; }
+
+input[type="color"] { height: 36px; padding: 2px; }

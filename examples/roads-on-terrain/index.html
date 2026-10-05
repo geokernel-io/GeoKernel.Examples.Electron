@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+
+  <title>RoadsOnTerrain — GeoKernel</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <aside>
+
+    <h1>Sagrada Família — terrain, orthophoto and roads</h1>
+
+    <label for="quality">Terrain mesh</label>
+
+    <select id="quality"><option value="256">256 — Fast</option><option value="512" selected>512 — Balanced</option><option value="1024">1024 — Detailed</option></select>
+
+    <button id="reload">Reload terrain</button>
+
+    <button id="cancel" disabled>Cancel loading</button>
+
+    <label><input id="imagery" type="checkbox" checked> Show orthophoto</label>
+
+    <label><input id="roads" type="checkbox" checked disabled> Show roads</label>
+
+    <label for="road-color">Road color</label>
+
+    <input id="road-color" type="color" value="#ffcf33" disabled>
+
+    <label for="road-opacity">Road opacity (%)</label>
+
+    <input id="road-opacity" type="number" min="0" max="100" step="1" value="100" disabled>
+
+    <label for="height">Vertical exaggeration</label>
+
+    <input id="height" type="number" min="0.25" max="10" step="0.25" value="1">
+
+    <p>DEM heights are treated as metres; the vertical datum is unverified.</p>
+
+    <p>Left drag: pan<br>Wheel / right drag: zoom<br>Middle / Ctrl + left drag: orbit</p>
+
+    <button id="reset">Reset view</button>
+
+    <progress id="progress"></progress>
+
+    <p id="status" role="status">Preparing terrain…</p>
+
+  </aside>
+
+  <script src="renderer.js"></script>
+
+</body>
+
+</html>
+

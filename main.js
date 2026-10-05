@@ -8,6 +8,18 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "project-save-load": "./examples/project-save-load/main",
+  "layer-styling-and-filtering": "./examples/layer-styling-and-filtering/main",
+  "terrain-analysis": "./examples/terrain-analysis/main",
+  "point-cloud-viewer": "./examples/point-cloud-viewer/main",
+  "tiles-3d-streaming": "./examples/tiles-3d-streaming/main",
+  "viewshed-analysis": "./examples/viewshed-analysis/main",
+  "elevation-profile": "./examples/elevation-profile/main",
+  "measurement-3d": "./examples/measurement-3d/main",
+  "feature-picking": "./examples/feature-picking/main",
+  "model-placement": "./examples/model-placement/main",
+  "buildings-3d": "./examples/buildings-3d/main",
+  "roads-on-terrain": "./examples/roads-on-terrain/main",
   "camera-navigation": "./examples/camera-navigation/main",
   "terrain-and-imagery": "./examples/terrain-and-imagery/main",
   "terrain-loading": "./examples/terrain-loading/main",

@@ -1,21 +1,17 @@
 "use strict";
 
 const path = require("path");
-const fs = require("fs");
 const koffi = require("koffi");
 const { createNativeLibrary, findBinDir } = require("geokernel-electron");
 
-// The 1.5.30 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
+// The 1.5.31 package exposes the Viewer3D C API; all calls stay on Electron's main thread.
 class TerrainViewer {
   constructor(parent) {
     if (process.platform !== "win32") throw new Error("TerrainAndImagery requires Windows x64.");
     this.runtime = createNativeLibrary();
     this.pump = this.runtime.getFunction("GeoKernelViewer_ProcessEvents");
     this.pump();
-    // The imagery API is not published in 1.5.30 yet.
-    const local = path.resolve(__dirname, "../../../GeoKernel/outputs/build/Release/GeoKernel.Viewer3D.dll");
-    const library = process.env.GEOKERNEL_VIEWER3D_LIBRARY ||
-      (fs.existsSync(local) ? local : path.join(findBinDir(), "GeoKernel.Viewer3D.dll"));
+    const library = path.join(findBinDir(), "GeoKernel.Viewer3D.dll");
     this.library = koffi.load(library);
     this.api = {};
     const signatures = {
@@ -35,7 +31,7 @@ class TerrainViewer {
       try {
         this.api[name] = this.library.func("GeoKernel3D_" + name, result, args);
       } catch (error) {
-        throw new Error(`The selected Viewer3D DLL lacks ${name}: ${library}. Build the current local SDK or set GEOKERNEL_VIEWER3D_LIBRARY.`, { cause: error });
+        throw new Error(`The selected Viewer3D DLL lacks ${name}: ${library}. Install geokernel-electron@1.5.31.`, { cause: error });
       }
     }
     const user32 = koffi.load("user32.dll");

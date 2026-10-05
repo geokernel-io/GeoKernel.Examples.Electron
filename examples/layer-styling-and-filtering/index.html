@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+<title>LayerStylingAndFiltering</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<h3>Sagrada Família — layer styling</h3>
+<button id="reload">Reload sample</button>
+<button id="cancel" disabled>Cancel loading</button>
+<fieldset id="scene" disabled>
+<label><input id="imagery" type="checkbox" checked> Show orthophoto</label>
+<label>Layer<select id="layer"></select></label>
+<label><input id="visible" type="checkbox"> Visible</label>
+<label>Opacity (%)<input id="opacity" type="number" min="0" max="100" value="100"></label>
+<label>Uniform color<input id="color" type="color" value="#ffffff"></label>
+<button id="source">Restore source color</button>
+<label>Color by attribute<select id="theme"></select></label>
+<label>Filter attribute<select id="field"></select></label>
+<label>Contains<input id="text" type="text" maxlength="4096" placeholder="Case-insensitive text"></label>
+<label>Example values<select id="values"></select></label>
+<button id="clear">Clear this filter</button>
+<p id="counts"></p>
+<button id="focus">Zoom to matching features</button>
+<button id="reset">Reset all styles and filters</button>
+<label>Vertical exaggeration<input id="height" type="number" min="0.25" max="10" step="0.25" value="1"></label>
+<button id="camera">Reset view</button>
+</fieldset>
+<p>Filters use literal substring matching and affect drawing and selection. Attribute coloring overrides uniform color. Changes are session-only.</p>
+<p>Up to 200 example values per field; filters search all records. Counts include records without drawable geometry. Building heights are illustrative (9 m). DEM vertical datum is unverified.</p>
+<p>Left drag: pan<br>Wheel/right drag: zoom<br>Middle/Ctrl+left drag: orbit</p>
+<p id="status" role="status">Preparing sample…</p>
+</aside>
+<script src="renderer.js"></script>
+</body>
+</html>

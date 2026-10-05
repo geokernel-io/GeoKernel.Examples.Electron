@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'">
+  <title>ViewshedAnalysis — GeoKernel</title>
+  <link rel="stylesheet" href="../buildings-3d/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside>
+    <h1>Sagrada Família — viewshed analysis</h1>
+    <button id="reload">Reload sample</button>
+    <button id="cancel" disabled>Cancel loading</button>
+    <label><input id="imagery" type="checkbox" checked disabled> Show orthophoto</label>
+    <p>Select observer, then click terrain. The marker shows eye height.</p>
+    <label><input id="capture" type="checkbox" checked disabled> Select observer on terrain</label>
+    <p id="location">No observer selected.</p>
+    <label for="eye">Observer above terrain (m)</label>
+    <input id="eye" type="number" min="0.1" max="100" step="0.1" value="1.7" required disabled>
+    <label for="target">Target above terrain (m)</label>
+    <input id="target" type="number" min="0" max="100" step="0.1" value="1.7" required disabled>
+    <label for="radius">Radius (m)</label>
+    <input id="radius" type="number" min="10" max="2000" step="1" value="300" required disabled>
+    <label for="spacing">Ray sample spacing (m)</label>
+    <input id="spacing" type="number" min="1" max="50" step="1" value="5" required disabled>
+    <label for="width">Grid</label>
+    <select id="width" disabled>
+      <option value="17">17 × 17 — fast</option>
+      <option value="33" selected>33 × 33 — balanced</option>
+      <option value="65">65 × 65 — detailed</option>
+    </select>
+    <button id="calculate" disabled>Calculate</button>
+    <button id="pause" disabled>Pause calculation</button>
+    <button id="clear" disabled>Clear observer and result</button>
+    <progress id="analysis-progress" max="100" value="0"></progress>
+    <canvas id="map" aria-label="North-up visibility grid"></canvas>
+    <label><input id="overlay" type="checkbox" checked disabled> Show result on terrain</label>
+    <p><span class="visible">■ Visible</span> <span class="blocked">■ Blocked</span><br>
+      <span class="unknown">■ Unknown / NoData</span> <span class="pending">■ Pending</span></p>
+    <p id="result">Load terrain to begin.</p>
+    <label for="height">Vertical exaggeration</label>
+    <input id="height" type="number" min="0.25" max="10" step="0.25" value="1" required disabled>
+    <button id="reset" disabled>Reset view</button>
+    <p>Terrain-only sampled visibility; buildings, vegetation and refraction are excluded.
+      The DEM mesh has 512 samples per side. Small obstacles between samples may be missed.
+      Vertical datum is unverified. Exaggeration changes only the view.</p>
+    <p>Left drag: pan<br>Wheel/right drag: zoom<br>Middle/Ctrl+left drag: orbit</p>
+    <progress id="progress"></progress>
+    <p id="status" role="status">Preparing sample…</p>
+  </aside>
+  <script src="renderer.js"></script>
+</body>
+</html>
