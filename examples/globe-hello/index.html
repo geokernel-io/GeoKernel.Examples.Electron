@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GlobeHello — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <header>
+    <label><input id="atmosphereEnabled" type="checkbox" disabled> Atmosphere</label>
+    <label><input id="basemap" type="checkbox" disabled> Esri Satellite</label>
+    <label><input id="terrainEnabled" type="checkbox" disabled> DEM</label>
+    <label><input id="sunlightEnabled" type="checkbox" disabled> Sunlight</label>
+  </header>
+  <main aria-label="Globe"></main>
+  <footer id="status" role="status">Starting Globe…</footer>
+</body>
+</html>

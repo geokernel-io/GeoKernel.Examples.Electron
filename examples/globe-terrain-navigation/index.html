@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GlobeTerrainNavigation — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <header>
+    <label><input id="atmosphereEnabled" type="checkbox" disabled> Atmosphere</label>
+    <label><input id="basemap" type="checkbox" disabled> Esri Satellite</label>
+    <label><input id="terrainEnabled" type="checkbox" disabled> DEM</label>
+    <label><input id="sunlightEnabled" type="checkbox" disabled> Sunlight</label>
+  </header>
+  <nav aria-label="Camera navigation">
+    <button data-action="ZoomIn" disabled>Zoom in</button>
+    <button data-action="ZoomOut" disabled>Zoom out</button>
+    <button data-action="RotateLeft" disabled>Rotate left</button>
+    <button data-action="RotateRight" disabled>Rotate right</button>
+    <button data-action="TiltUp" disabled>Tilt up</button>
+    <button data-action="TiltDown" disabled>Tilt down</button>
+    <button data-action="Top" disabled>Top view</button>
+    <button data-action="North" disabled>North</button>
+    <button data-action="Home" disabled>Overview</button>
+  </nav>
+  <main aria-label="Globe"></main>
+  <footer id="status" role="status">Starting Globe…</footer>
+</body>
+</html>

@@ -8,6 +8,13 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "globe-terrain-analysis": "./examples/globe-terrain-analysis/main",
+  "globe-raster-services": "./examples/globe-raster-services/main",
+  "globe-model-placement": "./examples/globe-model-placement/main",
+  "globe-buildings": "./examples/globe-buildings/main",
+  "globe-vector-styling": "./examples/globe-vector-styling/main",
+  "globe-terrain-navigation": "./examples/globe-terrain-navigation/main",
+  "globe-hello": "./examples/globe-hello/main",
   "project-save-load": "./examples/project-save-load/main",
   "layer-styling-and-filtering": "./examples/layer-styling-and-filtering/main",
   "terrain-analysis": "./examples/terrain-analysis/main",

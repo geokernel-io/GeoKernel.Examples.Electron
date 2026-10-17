@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GlobeVectorStyling — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <header>
+    <label><input id="fill" type="checkbox" checked disabled> Fill</label>
+    <label><input id="labels" type="checkbox" disabled> Labels</label>
+    <label>Color by: <select id="categoryField" disabled></select></label>
+    <label>Label: <select id="labelField" disabled></select></label>
+    <label>Opacity: <input id="opacity" type="range" min="15" max="100" value="60" disabled></label>
+    <label>Base color: <input id="baseColor" type="color" value="#efb84c" disabled></label>
+    <button id="zoom" disabled>Zoom to buildings</button>
+    <label><input id="esri" type="checkbox" checked disabled> Esri</label>
+  </header>
+  <main aria-label="Globe"></main>
+  <footer id="status" role="status">Starting Globe…</footer>
+</body>
+</html>

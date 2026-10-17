@@ -1,0 +1,5 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body { display: grid; grid-template-rows: 1fr 24px; font: 13px "Segoe UI", sans-serif; }
+main { background: #000; min-height: 0; }
+footer { padding: 3px 8px; background: #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

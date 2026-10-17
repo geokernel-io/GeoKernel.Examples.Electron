@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GlobeModelPlacement — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <header>
+    <button id="zoom" disabled>Zoom to model</button>
+    <button id="rotate" disabled>Rotate 30°</button>
+    <label>Scale: <input id="scale" type="number" min="0.01" max="10" step="0.01" value="1" required disabled></label>
+    <label>Anchor height (m): <input id="height" type="number" min="-100" max="10000" step="0.001" value="14.089" required disabled></label>
+    <button id="apply" disabled>Apply</button>
+    <button id="remove" disabled>Remove</button>
+    <button id="restore" disabled>Restore</button>
+    <label><input id="atmosphere" type="checkbox" checked disabled> Atmosphere</label>
+    <label><input id="esri" type="checkbox" checked disabled> Esri</label>
+  </header>
+  <main aria-label="Globe"></main>
+  <footer id="status" role="status">Starting Globe…</footer>
+</body>
+</html>

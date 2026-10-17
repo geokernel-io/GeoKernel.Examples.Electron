@@ -1,0 +1,9 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; font: 13px Segoe UI, sans-serif; }
+body { display: grid; grid-template-rows: 40px minmax(0, 1fr) 170px 24px; }
+nav { display: flex; align-items: center; gap: 5px; padding: 4px; background: #f0f0f0; }
+button { padding: 5px 9px; cursor: pointer; }
+button[aria-pressed="true"] { background: #d6eaff; border: 1px solid #0078d4; }
+main { background: #172d43; min-height: 0; }
+#result { margin: 0; padding: 10px; height: 170px; overflow: auto; white-space: pre-wrap; font: inherit; border-top: 1px solid #aaa; }
+footer { height: 24px; padding: 3px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #eee; }

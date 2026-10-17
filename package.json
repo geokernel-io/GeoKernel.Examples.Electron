@@ -27,6 +27,13 @@
     "add-layers": "electron . add-layers",
     "start": "npm run hello-map",
     "hello-map": "electron . hello-map",
+    "globe-hello": "electron . globe-hello",
+    "globe-model-placement": "electron . globe-model-placement",
+    "globe-raster-services": "electron . globe-raster-services",
+    "globe-terrain-analysis": "electron . globe-terrain-analysis",
+    "globe-buildings": "electron . globe-buildings",
+    "globe-vector-styling": "electron . globe-vector-styling",
+    "globe-terrain-navigation": "electron . globe-terrain-navigation",
     "layer-add-remove": "electron . layer-add-remove",
     "layer-reorder": "electron . layer-reorder",
     "layer-visibility": "electron . layer-visibility",
@@ -170,7 +177,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.5.32",
+    "geokernel-electron": "1.5.35",
     "koffi": "2.16.2"
   },
   "devDependencies": {
