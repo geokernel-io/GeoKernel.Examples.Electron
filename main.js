@@ -8,6 +8,13 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "sen2sr-super-resolution": "./examples/sen2sr-super-resolution/main",
+  "sam3-segmentation-inference": "./examples/sam3-segmentation-inference/main",
+  "prue-field-boundaries": "./examples/prue-field-boundaries/main",
+  "prithvi-flood-analysis": "./examples/prithvi-flood-analysis/main",
+  "geoai-usa-building-footprints": "./examples/geoai-usa-building-footprints/main",
+  "hotosm-building-footprints": "./examples/hotosm-building-footprints/main",
+  "dynamic-world-inference": "./examples/dynamic-world-inference/main",
   "globe-terrain-analysis": "./examples/globe-terrain-analysis/main",
   "globe-raster-services": "./examples/globe-raster-services/main",
   "globe-model-placement": "./examples/globe-model-placement/main",

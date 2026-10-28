@@ -6,6 +6,10 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
+    "sen2sr-super-resolution": "electron . sen2sr-super-resolution",
+    "prue-field-boundaries": "electron . prue-field-boundaries",
+    "prithvi-flood-analysis": "electron . prithvi-flood-analysis",
+    "geoai-usa-building-footprints": "electron . geoai-usa-building-footprints",
     "project-save-load": "electron . project-save-load",
     "layer-styling-and-filtering": "electron . layer-styling-and-filtering",
     "terrain-analysis": "electron . terrain-analysis",
@@ -173,12 +177,16 @@
     "camera-navigation": "electron . camera-navigation",
     "roads-on-terrain": "electron . roads-on-terrain",
     "buildings-3d": "electron . buildings-3d",
-    "model-placement": "electron . model-placement"
+    "model-placement": "electron . model-placement",
+    "dynamic-world-inference": "electron . dynamic-world-inference",
+    "hotosm-building-footprints": "electron . hotosm-building-footprints",
+    "sam3-segmentation-inference": "electron . sam3-segmentation-inference"
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "geokernel-electron": "1.5.35",
-    "koffi": "2.16.2"
+    "geokernel-electron": "1.5.39",
+    "koffi": "2.16.2",
+    "yauzl": "2.10.0"
   },
   "devDependencies": {
     "electron": "^38.0.0"
