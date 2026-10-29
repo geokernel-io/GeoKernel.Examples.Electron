@@ -8,6 +8,7 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "building-change-review": "./examples/building-change-review/main",
   "sen2sr-super-resolution": "./examples/sen2sr-super-resolution/main",
   "sam3-segmentation-inference": "./examples/sam3-segmentation-inference/main",
   "prue-field-boundaries": "./examples/prue-field-boundaries/main",

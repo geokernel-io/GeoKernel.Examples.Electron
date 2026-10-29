@@ -6,6 +6,7 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
+    "building-change-review": "electron . building-change-review",
     "sen2sr-super-resolution": "electron . sen2sr-super-resolution",
     "prue-field-boundaries": "electron . prue-field-boundaries",
     "prithvi-flood-analysis": "electron . prithvi-flood-analysis",

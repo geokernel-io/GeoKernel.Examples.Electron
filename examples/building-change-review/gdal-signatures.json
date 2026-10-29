@@ -1,0 +1,83 @@
+{
+  "GDALAllRegister": ["void", []],
+  "GDALOpen": ["void *", ["str", "int"]],
+  "GDALOpenEx": ["void *", ["str", "uint", "void *", "void *", "void *"]],
+  "GDALClose": ["void", ["void *"]],
+  "GDALGetDriverByName": ["void *", ["str"]],
+  "GDALAutoCreateWarpedVRT": [
+    "void *",
+    ["void *", "str", "str", "int", "double", "void *"]
+  ],
+  "GDALCreateCopy": [
+    "void *",
+    ["void *", "str", "void *", "int", "void *", "void *", "void *"]
+  ],
+  "GDALCreate": [
+    "void *",
+    ["void *", "str", "int", "int", "int", "int", "void *"]
+  ],
+  "GDALGetRasterXSize": ["int", ["void *"]],
+  "GDALGetRasterYSize": ["int", ["void *"]],
+  "GDALGetRasterCount": ["int", ["void *"]],
+  "GDALGetRasterBand": ["void *", ["void *", "int"]],
+  "GDALGetGeoTransform": ["int", ["void *", "void *"]],
+  "GDALSetGeoTransform": ["int", ["void *", "void *"]],
+  "GDALGetProjectionRef": ["str", ["void *"]],
+  "GDALSetProjection": ["int", ["void *", "str"]],
+  "GDALRasterIO": [
+    "int",
+    [
+      "void *",
+      "int",
+      "int",
+      "int",
+      "int",
+      "int",
+      "void *",
+      "int",
+      "int",
+      "int",
+      "int",
+      "int"
+    ]
+  ],
+  "GDALSetRasterColorInterpretation": ["int", ["void *", "int"]],
+  "GDALDatasetGetLayer": ["void *", ["void *", "int"]],
+  "OGR_L_ResetReading": ["void", ["void *"]],
+  "OGR_L_GetNextFeature": ["void *", ["void *"]],
+  "OGR_F_Destroy": ["void", ["void *"]],
+  "OGR_F_GetGeometryRef": ["void *", ["void *"]],
+  "OGR_F_GetFieldIndex": ["int", ["void *", "str"]],
+  "OGR_F_GetFieldAsInteger": ["int", ["void *", "int"]],
+  "OGR_G_ExportToJson": ["void *", ["void *"]],
+  "OGR_G_CreateGeometryFromJson": ["void *", ["str"]],
+  "OGR_G_DestroyGeometry": ["void", ["void *"]],
+  "OGR_G_Clone": ["void *", ["void *"]],
+  "OGR_G_Area": ["double", ["void *"]],
+  "OGR_G_IsValid": ["int", ["void *"]],
+  "OGR_G_Transform": ["int", ["void *", "void *"]],
+  "VSIFree": ["void", ["void *"]],
+  "OSRNewSpatialReference": ["void *", ["str"]],
+  "OSRImportFromEPSG": ["int", ["void *", "int"]],
+  "OSRSetAxisMappingStrategy": ["void", ["void *", "int"]],
+  "OSRDestroySpatialReference": ["void", ["void *"]],
+  "OCTNewCoordinateTransformation": ["void *", ["void *", "void *"]],
+  "OCTDestroyCoordinateTransformation": ["void", ["void *"]],
+  "OCTTransform": ["int", ["void *", "int", "void *", "void *", "void *"]],
+  "GDALRasterizeLayers": [
+    "int",
+    [
+      "void *",
+      "int",
+      "int *",
+      "int",
+      "void **",
+      "void *",
+      "void *",
+      "void *",
+      "str *",
+      "void *",
+      "void *"
+    ]
+  ]
+}

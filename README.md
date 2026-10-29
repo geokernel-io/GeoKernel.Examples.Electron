@@ -12,6 +12,14 @@ Official Electron and JavaScript examples for the GeoKernel native GIS SDK.
 
 From the repository root, install dependencies with `npm install` and run an example using its npm script.
 
+## BuildingChangeReview
+
+Run `npm run building-change-review`. The sample automatically prepares Oosterwold
+2016/2025 imagery and the HOTOSM model, then provides synchronized maps, change
+candidates, vertex editing, review decisions and approved-only GeoJSON export.
+Uses the published SDK 1.5.39.
+See [workflow and verified inputs](examples/building-change-review/README.md).
+
 ## Resources
 
 - [GeoKernel Website](https://geokernel.io)
