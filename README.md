@@ -12,6 +12,50 @@ Official Electron and JavaScript examples for the GeoKernel native GIS SDK.
 
 From the repository root, install dependencies with `npm install` and run an example using its npm script.
 
+## DsmToDtm
+
+Run `npm run dsm-to-dtm`. Ground beneath buildings: two linked native 3D views of
+an original DSM and prepared classical/AI terrain, numeric height transition, fixed
+transect profile and reference metrics. The pinned Zurich sample is downloaded and
+SHA-256 verified automatically; no inference runs.
+See [workflow and data](examples/dsm-to-dtm/README.md).
+
+## DsmToDtmProfile
+
+Run `npm run dsm-to-dtm-profile`. Draw your own A → B transect on two linked native 2D
+relief maps and compare DSM, classical, AI and reference heights on one chart, with an
+error mode, hover inspection, line RMSE/MAE and CSV export. Reuses the verified
+DsmToDtm sample. See [workflow and notes](examples/dsm-to-dtm-profile/README.md).
+
+## DsmToDtmAccuracy
+
+Run `npm run dsm-to-dtm-accuracy`. Three linked native 2D maps of the DSM and
+shared-scale classical/AI reference errors; area selection and presets, RMSE/MAE/bias/P95,
+histogram, pixel probe and JSON report. Reuses the verified DsmToDtm sample. See
+[workflow and notes](examples/dsm-to-dtm-accuracy/README.md).
+
+## DsmToDtmProcessing
+
+Run `npm run dsm-to-dtm-processing`. Run the classical multiscale-morphological + TIN
+conversion live with presets and six parameters; DSM, new DTM and removed-height/quality/
+reference-error maps, scores, pixel probe and GeoTIFF/QA/JSON export. Reuses the verified
+DsmToDtm sample. See [workflow and notes](examples/dsm-to-dtm-processing/README.md).
+
+## DsmToDtmAI
+
+Run `npm run dsm-to-dtm-ai`. Run the experimental pix_grad model through GeoKernel.AI and
+the classical filter on the same full 1 km Zurich DSM; relief/removed-height/error maps,
+full-input and shared-crop scores, pixel probe and a staged comparison-folder export. Model
+and terrain are downloaded and hash-verified on first start. See
+[workflow and notes](examples/dsm-to-dtm-ai/README.md).
+
+## DsmOrthoToDtm
+
+Run `npm run dsm-to-dtm-ortho`. Compare classical, DSM-only pix_grad and DSM+RGB rgb_grad_fm
+terrain estimates on the same full Zurich DSM; orthophoto/DSM input context, four linked 2D
+maps, full-input and shared-crop scores, pixel probe and a staged comparison-folder export.
+See [workflow and notes](examples/dsm-to-dtm-ortho/README.md).
+
 ## BuildingChangeReview
 
 Run `npm run building-change-review`. The sample automatically prepares Oosterwold

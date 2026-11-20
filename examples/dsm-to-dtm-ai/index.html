@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'">
+  <title>DSM to DTM | Live AI versus classical — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="toolbar">
+    <button data-tool="pan">Pan</button>
+    <button data-tool="box">Zoom box</button>
+    <button data-zoom="in"><img src="../../images/ZoomIn.png" alt=""> Zoom in</button>
+    <button data-zoom="out"><img src="../../images/ZoomOut.png" alt=""> Zoom out</button>
+    <button data-zoom="full"><img src="../../images/FullExtent.png" alt=""> Fit comparison</button>
+  </nav>
+  <div class="page">
+    <aside>
+      <h1>AI / Classical<br>Run both methods</h1>
+      <p>One DSM · two independent estimates.<br>pix_grad · experimental DSM-only model.</p>
+      <button id="sample">Load full Zurich 1 km tile</button>
+      <button id="open">Open DSM GeoTIFF...</button>
+      <button id="reference">Open reference (optional)...</button>
+      <pre id="source" class="card">Preparing source data...</pre>
+      <button id="model">Download / verify model</button>
+      <button id="zip">Use model ZIP...</button>
+      <pre id="modelInfo" class="card">Model not prepared.</pre>
+      <div class="field"><label for="overlap">Tile overlap (px)</label><input id="overlap" type="number" min="0" max="128" step="32" value="64"></div>
+      <div class="field"><label for="threads">CPU threads</label><input id="threads" type="number" min="1" max="8" step="1" value="4"></div>
+      <div class="field"><label for="preset">Classical preset</label><select id="preset"></select></div>
+      <button id="run">Run AI + classical</button>
+      <button id="cancel" disabled>Cancel</button>
+      <p id="state">Load source and model, then Run.</p>
+      <label for="mode">Compare maps</label>
+      <select id="mode"><option value="0">Terrain relief</option><option value="1">Removed height: DSM − DTM</option><option value="2">Signed reference errors</option></select>
+      <select id="scope" aria-label="Evaluation scope"><option value="0">Full input</option><option value="1">Shared comparison crop</option></select>
+      <p>Source DSM remains on the left. Display and evaluation scope never change the full input used for processing.</p>
+      <button id="save">Save comparison folder...</button>
+      <pre id="probe" class="card">Click a source pixel to inspect both estimates.</pre>
+      <p>Terrain: Federal Office of Topography swisstopo.<br>Weights: David Perez · CC BY 4.0 · Zenodo 7973800.<br>Reference is evaluation-only. No vertical datum conversion.</p>
+    </aside>
+    <main>
+      <div class="views">
+        <section><h2>ORIGINAL DSM · shared input</h2><div id="view0" class="view"></div></section>
+        <section><h2 id="heading1">CLASSICAL DTM · Run to generate</h2><div id="view1" class="view"></div></section>
+        <section><h2 id="heading2">AI DTM · Run to generate</h2><div id="view2" class="view"></div></section>
+      </div>
+      <p id="legend">Same light and contrast for both methods. No conversion has run yet.</p>
+      <table id="scores">
+        <thead><tr><th>Method</th><th>Valid pixels</th><th>RMSE (m)</th><th>MAE (m)</th><th>Bias (m)</th></tr></thead>
+        <tbody><tr class="classical"><td></td><td></td><td></td><td></td><td></td></tr><tr class="ai"><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+      </table>
+      <pre id="summary">No prepared terrain result is loaded.</pre>
+      <p>Both methods process the complete supplied DSM. The shared crop changes only the view and scores. Experimental model; this development scene is not a held-out benchmark.</p>
+    </main>
+  </div>
+  <footer><span id="status" role="status">Preparing source data...</span><progress id="progress" max="100" hidden></progress></footer>
+  <script src="renderer.js"></script>
+</body>
+</html>

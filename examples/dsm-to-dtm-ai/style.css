@@ -1,0 +1,31 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { display: flex; flex-direction: column; background: #f2f6f8; color: #233e50; font: 13px "Segoe UI", sans-serif; }
+.toolbar { display: flex; gap: 6px; padding: 7px; background: white; border-bottom: 1px solid #d5e2e9; align-items: center; }
+.toolbar button { width: auto; margin: 0; padding: 4px 8px; background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer; color: inherit; }
+.toolbar button:hover:not(:disabled) { border-color: #d5e2e9; }
+.toolbar button.on { background: #e4eef2; border-color: #b9d0da; }
+.toolbar img { width: 18px; height: 18px; vertical-align: middle; }
+.page { flex: 1; display: flex; gap: 12px; padding: 12px; min-height: 0; }
+aside { width: 290px; flex: none; overflow-y: auto; padding-right: 10px; }
+aside h1 { font-size: 21px; font-weight: 600; color: #145e72; margin: 0 0 12px; }
+aside p, aside label { margin: 0 0 11px; display: block; line-height: 1.4; }
+aside select, aside button { width: 100%; padding: 7px 10px; margin-bottom: 9px; }
+.card { background: white; border: 1px solid #d5e2e9; padding: 9px; white-space: pre-wrap; font: inherit; margin: 0 0 11px; }
+.field { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.field label { margin: 0; flex: 1; }
+.field input { width: 100px; padding: 5px; margin: 0; }
+main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+main > p, main > pre { margin: 4px 0; font: inherit; white-space: pre-wrap; }
+.views { flex: 1; display: flex; gap: 8px; min-height: 260px; }
+.views section { flex: 1; display: flex; flex-direction: column; min-width: 240px; }
+.views h2 { margin: 0; padding: 9px; font-size: 13px; font-weight: 600; background: #e4eef2; color: #125a70; }
+.view { flex: 1; background: white; }
+footer { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: #e9eef1; border-top: 1px solid #d5e2e9; }
+footer progress { width: 230px; height: 14px; }
+.field select { width: 150px; margin: 0; padding: 5px; }
+#scores { width: 100%; border-collapse: collapse; background: white; border: 1px solid #c9d8e0; margin: 4px 0; }
+#scores th, #scores td { text-align: left; padding: 5px 8px; border-bottom: 1px solid #e4eef2; }
+#scores th { background: #eef3f6; font-weight: 600; }
+#scores tr.classical td { color: #087e8b; }
+#scores tr.ai td { color: #8857bd; }

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'">
+  <title>DSM to DTM | Where is each method more accurate? — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="toolbar">
+    <button id="select">Select evaluation area</button>
+    <button id="current">Evaluate current view</button>
+    <button id="full-sample">Full sample</button>
+    <span class="separator"></span>
+    <button data-tool="pan">Pan</button>
+    <button data-tool="box">Zoom box</button>
+    <button data-zoom="in"><img src="../../images/ZoomIn.png" alt=""> Zoom in</button>
+    <button data-zoom="out"><img src="../../images/ZoomOut.png" alt=""> Zoom out</button>
+    <button data-zoom="full"><img src="../../images/FullExtent.png" alt=""> Full extent</button>
+  </nav>
+  <div class="page">
+    <aside>
+      <h1>Where does each<br>method work better?</h1>
+      <p>Zürich · same DSM and reference<br>250 × 250 m · 0.5 m source cells</p>
+      <p id="instructions" class="card">Preparing sample data...</p>
+      <label for="mode">Map comparison</label>
+      <select id="mode"><option value="0">Signed reference errors</option><option value="1">Absolute reference errors</option><option value="2">Terrain estimates</option></select>
+      <div class="field"><label for="range">Display limit</label><select id="range"><option value="0">1 m</option><option value="1" selected>2 m</option><option value="2">5 m</option><option value="3">10 m</option></select></div>
+      <div class="field"><label for="threshold">Large error &gt; (m)</label><input id="threshold" type="number" min="0.1" max="20" step="0.5" value="2"></div>
+      <label for="preset">Study-area preset</label>
+      <select id="preset"><option value="0">Full sample</option><option value="1">Central urban block</option><option value="2">Northern block</option><option value="3">Southern block</option><option value="4">Custom selection</option></select>
+      <pre id="winners" class="card">Compare lower errors for each metric.</pre>
+      <pre id="probe" class="card">Click a map pixel to inspect its heights and signed errors.</pre>
+      <p>One shared reference and source grid. Geographic presets are not land-cover classes. Dimmed map pixels are outside the evaluated area.</p>
+      <button id="export">Export area report</button>
+      <button id="retry">Retry / reload sample</button>
+      <button id="cancel" disabled>Cancel loading</button>
+      <p>Source: Federal Office of Topography swisstopo<br>AI: David Perez · experimental pix_grad</p>
+    </aside>
+    <main>
+      <div class="views">
+        <section><h2>ORIGINAL DSM · context</h2><div id="view0" class="view"></div></section>
+        <section><h2 id="heading1">CLASSICAL DTM · reference error</h2><div id="view1" class="view"></div></section>
+        <section><h2 id="heading2">AI DTM · reference error</h2><div id="view2" class="view"></div></section>
+      </div>
+      <canvas id="legend"></canvas>
+      <p id="scope">No evaluation area loaded.</p>
+      <table id="metrics">
+        <thead><tr><th>Method</th><th>RMSE (m)</th><th>MAE (m)</th><th>Bias (m)</th><th>P95 |error| (m)</th><th id="above-header">|error| &gt; 2 m (%)</th></tr></thead>
+        <tbody><tr class="classical"><td>Classical</td><td></td><td></td><td></td><td></td><td></td></tr><tr class="ai"><td>AI · pix_grad</td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+      </table>
+      <canvas id="histogram"></canvas>
+      <p>Prepared independent results; reference is evaluation-only. Source heights: LN02 metres, no vertical datum conversion. Source filename years: DSM 2018 / reference 2019. Fixed development crop; these are not held-out benchmark results.</p>
+    </main>
+  </div>
+  <footer><span id="status" role="status">Preparing sample data...</span><progress id="progress" max="100" hidden></progress></footer>
+  <script src="renderer.js"></script>
+</body>
+</html>

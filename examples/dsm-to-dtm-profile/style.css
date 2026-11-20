@@ -1,0 +1,28 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { display: flex; flex-direction: column; background: #f2f6f8; color: #233e50; font: 13px "Segoe UI", sans-serif; }
+.toolbar { display: flex; gap: 6px; padding: 7px; background: white; border-bottom: 1px solid #d5e2e9; align-items: center; }
+.toolbar button { width: auto; margin: 0; padding: 4px 8px; background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer; color: inherit; }
+.toolbar button:hover:not(:disabled) { border-color: #d5e2e9; }
+.toolbar button.on { background: #e4eef2; border-color: #b9d0da; }
+.toolbar img { width: 18px; height: 18px; vertical-align: middle; }
+.separator { width: 1px; height: 22px; background: #d5e2e9; margin: 0 4px; }
+.page { flex: 1; display: flex; gap: 12px; padding: 12px; min-height: 0; }
+aside { width: 285px; flex: none; overflow-y: auto; padding-right: 10px; }
+aside h1 { font-size: 21px; font-weight: 600; color: #145e72; margin: 0 0 12px; }
+aside p, aside label { margin: 0 0 12px; display: block; line-height: 1.4; }
+select, button { width: 100%; padding: 7px 10px; margin-bottom: 12px; }
+.card { background: white; border: 1px solid #d5e2e9; padding: 10px; white-space: pre-wrap; font: inherit; margin: 0 0 12px; }
+.field { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.field label { margin: 0; flex: 1; }
+.field input { width: 80px; padding: 5px; }
+main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+main > p { margin: 4px 0; }
+.views { flex: 2; display: flex; gap: 8px; min-height: 280px; }
+.views section { flex: 1; display: flex; flex-direction: column; min-width: 300px; }
+.views h2 { margin: 0; padding: 9px; font-size: 13px; font-weight: 600; background: #e4eef2; color: #125a70; }
+.view { flex: 1; background: white; }
+#mode { margin: 8px 0 0; }
+#chart { flex: 1; min-height: 200px; width: 100%; background: white; }
+footer { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: #e9eef1; border-top: 1px solid #d5e2e9; }
+footer progress { width: 200px; height: 14px; }

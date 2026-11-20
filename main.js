@@ -8,6 +8,12 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "dsm-to-dtm": "./examples/dsm-to-dtm/main",
+  "dsm-to-dtm-profile": "./examples/dsm-to-dtm-profile/main",
+  "dsm-to-dtm-accuracy": "./examples/dsm-to-dtm-accuracy/main",
+  "dsm-to-dtm-processing": "./examples/dsm-to-dtm-processing/main",
+  "dsm-to-dtm-ai": "./examples/dsm-to-dtm-ai/main",
+  "dsm-to-dtm-ortho": "./examples/dsm-to-dtm-ortho/main",
   "building-change-review": "./examples/building-change-review/main",
   "sen2sr-super-resolution": "./examples/sen2sr-super-resolution/main",
   "sam3-segmentation-inference": "./examples/sam3-segmentation-inference/main",
@@ -208,6 +214,11 @@ function resolveExampleName(value) {
 
 const exampleName = resolveExampleName(process.argv[2]);
 let activeExample = null;
+
+// Examples that place native 2D GeoKernel maps (GDI-presented child windows) inside the page.
+// Chromium's GPU compositor draws over such child windows, so these use software compositing.
+const NATIVE_2D_IN_PAGE = new Set(["dsm-to-dtm-profile", "dsm-to-dtm-accuracy", "dsm-to-dtm-processing", "dsm-to-dtm-ai", "dsm-to-dtm-ortho"]);
+if (NATIVE_2D_IN_PAGE.has(exampleName)) app.disableHardwareAcceleration();
 
 function fail(error) {
   console.error(error?.stack || error);

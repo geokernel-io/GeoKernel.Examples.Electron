@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'">
+  <title>DSM + Orthophoto to DTM | Three independent methods — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="toolbar">
+    <button data-tool="pan">Pan</button>
+    <button data-tool="box">Zoom box</button>
+    <button data-zoom="in"><img src="../../images/ZoomIn.png" alt=""> Zoom in</button>
+    <button data-zoom="out"><img src="../../images/ZoomOut.png" alt=""> Zoom out</button>
+    <button data-zoom="full"><img src="../../images/FullExtent.png" alt=""> Fit comparison</button>
+  </nav>
+  <div class="page">
+    <aside>
+      <h1>DSM + RGB → DTM<br>Compare three methods</h1>
+      <p>Classical · DSM-only AI · DSM+RGB AI.<br>Each starts from the same full DSM.</p>
+      <button id="sample">Load Zurich DSM + orthophoto</button>
+      <button id="open">Open aligned DSM + RGB...</button>
+      <button id="reference">Open reference (optional)...</button>
+      <pre id="source" class="card">Preparing sample...</pre>
+      <button id="models">Download / verify both models</button>
+      <button id="pixModel">Use pix_grad model ZIP...</button>
+      <button id="rgbModel">Use RGB model ZIP...</button>
+      <pre id="modelInfo" class="card">Models not prepared.</pre>
+      <div class="field"><label for="overlap">AI overlap (px)</label><input id="overlap" type="number" min="0" max="128" step="32" value="64"></div>
+      <div class="field"><label for="threads">CPU threads</label><input id="threads" type="number" min="1" max="8" step="1" value="4"></div>
+      <div class="field"><label for="preset">Classical preset</label><select id="preset"></select></div>
+      <button id="run">Run all three methods</button>
+      <button id="cancel" disabled>Cancel</button>
+      <p id="state">Load data and models, then Run.</p>
+      <label for="input">Input context</label>
+      <select id="input"><option value="0">Original DSM relief</option><option value="1" selected>RGB orthophoto</option></select>
+      <label for="mode">Compare estimates</label>
+      <select id="mode"><option value="0">Terrain relief</option><option value="1">Removed height: DSM − DTM</option><option value="2">Signed reference errors</option></select>
+      <select id="scope" aria-label="Evaluation scope"><option value="0">Full input</option><option value="1" selected>Shared comparison crop</option></select>
+      <button id="save">Save comparison folder...</button>
+      <pre id="probe" class="card">Click a source pixel to inspect RGB and all terrain estimates.</pre>
+      <p>Data: Federal Office of Topography swisstopo.<br>AI weights: David Perez · CC BY 4.0.<br>Reference is evaluation-only; no datum conversion.</p>
+    </aside>
+    <main>
+      <div class="views">
+        <section><h2 id="heading0">RGB ORTHOPHOTO · input context</h2><div id="view0" class="view"></div></section>
+        <section><h2 id="heading1">CLASSICAL · DSM only</h2><div id="view1" class="view"></div></section>
+        <section><h2 id="heading2">PIX_GRAD · DSM only</h2><div id="view2" class="view"></div></section>
+        <section><h2 id="heading3">RGB_GRAD_FM · DSM + RGB</h2><div id="view3" class="view"></div></section>
+      </div>
+      <p id="legend">Inputs ready first; Run generates all three terrain estimates.</p>
+      <table id="scores">
+        <thead><tr><th>Method</th><th>Valid pixels</th><th>RMSE (m)</th><th>MAE (m)</th><th>Bias (m)</th></tr></thead>
+        <tbody>
+          <tr class="classical"><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr class="pix"><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr class="rgb"><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <pre id="summary">No prepared prediction is loaded.</pre>
+      <p>Different pretrained checkpoints and objectives: differences do not isolate the causal benefit of RGB. Process full input, then evaluate the same crop. Experimental development scene.</p>
+    </main>
+  </div>
+  <footer><span id="status" role="status">Preparing sample...</span><progress id="progress" max="100" hidden></progress></footer>
+  <script src="renderer.js"></script>
+</body>
+</html>

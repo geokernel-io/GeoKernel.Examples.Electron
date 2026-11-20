@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'">
+  <title>DSM to DTM | Interactive elevation profile — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="toolbar">
+    <button id="draw" class="toggle">Draw transect · A → B</button>
+    <button id="example">Example transect</button>
+    <button id="clear">Clear transect</button>
+    <span class="separator"></span>
+    <button data-tool="pan">Pan</button>
+    <button data-tool="box">Zoom box</button>
+    <button data-zoom="in"><img src="../../images/ZoomIn.png" alt=""> Zoom in</button>
+    <button data-zoom="out"><img src="../../images/ZoomOut.png" alt=""> Zoom out</button>
+    <button data-zoom="full"><img src="../../images/FullExtent.png" alt=""> Full extent</button>
+  </nav>
+  <div class="page">
+    <aside>
+      <h1>Compare along<br>your own transect</h1>
+      <p>Zürich · 250 × 250 m<br>0.5 m height pixels · EPSG:2056</p>
+      <p id="instructions" class="card">Preparing sample data...</p>
+      <label for="surface">Right-hand map</label>
+      <select id="surface"><option value="1">Classical DTM</option><option value="2">AI DTM · pix_grad</option><option value="3">Reference DTM · evaluation only</option></select>
+      <div class="field"><label for="spacing">Sample spacing (m)</label><input id="spacing" type="number" min="0.5" max="10" step="0.5" value="0.5"></div>
+      <pre id="stats" class="card">Select a transect to compare errors.</pre>
+      <pre id="cursor" class="card">Move over the chart to locate a sample on both maps.</pre>
+      <p>Profiles sample numeric Float32 heights with bilinear interpolation. Relief images are for display only. Finer sampling cannot add source detail.</p>
+      <button id="export">Export profile CSV</button>
+      <button id="retry">Retry / reload sample</button>
+      <button id="cancel" disabled>Cancel loading</button>
+      <p>Source: Federal Office of Topography swisstopo<br>AI: David Perez · experimental pix_grad</p>
+    </aside>
+    <main>
+      <div class="views">
+        <section><h2>ORIGINAL DSM · roofs + trees + ground</h2><div id="view0" class="view"></div></section>
+        <section><h2 id="heading1">CLASSICAL DTM · prepared estimate</h2><div id="view1" class="view"></div></section>
+      </div>
+      <select id="mode"><option value="0">Compare elevations</option><option value="1">Compare errors against reference</option></select>
+      <canvas id="chart"></canvas>
+      <p id="legend">Gray DSM · teal classical · purple AI · dashed orange reference · map: A teal, B orange</p>
+      <p>Prepared independent results; no new inference. Reference is evaluation-only. Source LN02 heights, metres; no vertical datum conversion. DSM/reference source years: 2018/2019. This is a fixed development scene.</p>
+    </main>
+  </div>
+  <footer><span id="status" role="status">Preparing sample data...</span><progress id="progress" max="100" hidden></progress></footer>
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'">
+  <title>DSM to DTM | Live classical processing — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="toolbar">
+    <button data-tool="pan">Pan</button>
+    <button data-tool="box">Zoom box</button>
+    <button data-zoom="in"><img src="../../images/ZoomIn.png" alt=""> Zoom in</button>
+    <button data-zoom="out"><img src="../../images/ZoomOut.png" alt=""> Zoom out</button>
+    <button data-zoom="full"><img src="../../images/FullExtent.png" alt=""> Fit scene</button>
+  </nav>
+  <div class="page">
+    <aside>
+      <h1>DSM → DTM<br>Run the conversion</h1>
+      <p>Live multiscale filtering + TIN.<br>Change parameters, then Run.</p>
+      <button id="sample">Load Zurich sample</button>
+      <button id="open">Open DSM GeoTIFF...</button>
+      <button id="reference">Open reference (optional)...</button>
+      <pre id="source" class="card">No source loaded.</pre>
+      <select id="preset" aria-label="Processing preset"></select>
+      <div class="field"><label for="working">Working grid (m)</label><input id="working" type="number" min="0.25" max="20" step="0.5" value="2"></div>
+      <div class="field"><label for="window">Max. window (m)</label><input id="window" type="number" min="4" max="200" step="4" value="64"></div>
+      <div class="field"><label for="threshold">Base threshold (m)</label><input id="threshold" type="number" min="0.05" max="3" step="0.05" value="0.4"></div>
+      <div class="field"><label for="slope">Slope allowance</label><input id="slope" type="number" min="0" max="0.5" step="0.02" value="0.12"></div>
+      <div class="field"><label for="terrain">Relief allowance</label><input id="terrain" type="number" min="0" max="2" step="0.1" value="0.5"></div>
+      <div class="field"><label for="retain">Keep tolerance (m)</label><input id="retain" type="number" min="0" max="1" step="0.05" value="0.35"></div>
+      <button id="run">Run DSM → DTM</button>
+      <button id="cancel" disabled>Cancel</button>
+      <p id="state">Load a DSM to begin.</p>
+      <label for="mode">Right map</label>
+      <select id="mode"><option value="0">Removed height: DSM − DTM</option><option value="1">Support / edge quality</option><option value="2">Signed reference error</option></select>
+      <pre id="metrics" class="card">Reference errors appear after a completed run.</pre>
+      <button id="save">Save result GeoTIFFs...</button>
+      <pre id="probe" class="card">Click any map to inspect source heights.</pre>
+      <p>Sample: Federal Office of Topography swisstopo.<br>Reference is evaluation-only. Heights are metres; no vertical datum conversion.</p>
+    </aside>
+    <main>
+      <div class="views">
+        <section><h2>ORIGINAL DSM · input</h2><div id="view0" class="view"></div></section>
+        <section><h2 id="heading1">PROCESSED DTM · Run to generate</h2><div id="view1" class="view"></div></section>
+        <section><h2 id="heading2">REMOVED HEIGHT · Run to generate</h2><div id="view2" class="view"></div></section>
+      </div>
+      <p id="legend">Original DSM remains visible. Both relief maps use identical lighting and contrast.</p>
+      <pre id="summary">No processing has run yet.</pre>
+      <p>Edge-sensitive band = half the maximum filter window. Use a larger DSM and crop afterward for better context. This prototype is independent of ArcGIS Terrain Filter.</p>
+    </main>
+  </div>
+  <footer><span id="status" role="status">Preparing sample data...</span><progress id="progress" max="100" hidden></progress></footer>
+  <script src="renderer.js"></script>
+</body>
+</html>

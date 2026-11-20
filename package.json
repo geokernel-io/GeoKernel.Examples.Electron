@@ -6,6 +6,12 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
+    "dsm-to-dtm": "electron . dsm-to-dtm",
+    "dsm-to-dtm-profile": "electron . dsm-to-dtm-profile",
+    "dsm-to-dtm-accuracy": "electron . dsm-to-dtm-accuracy",
+    "dsm-to-dtm-processing": "electron . dsm-to-dtm-processing",
+    "dsm-to-dtm-ai": "electron . dsm-to-dtm-ai",
+    "dsm-to-dtm-ortho": "electron . dsm-to-dtm-ortho",
     "building-change-review": "electron . building-change-review",
     "sen2sr-super-resolution": "electron . sen2sr-super-resolution",
     "prue-field-boundaries": "electron . prue-field-boundaries",

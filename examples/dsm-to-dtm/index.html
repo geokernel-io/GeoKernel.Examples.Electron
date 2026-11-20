@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'">
+  <title>DSM to DTM | Ground beneath buildings — GeoKernel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="toolbar">
+    <button data-camera="reset" title="Reset view"><img src="../../images/FullExtent.png" alt="Reset view"></button>
+    <button data-camera="top">Top view</button>
+    <button data-camera="zoom-in" title="Zoom in"><img src="../../images/ZoomIn.png" alt="Zoom in"></button>
+    <button data-camera="zoom-out" title="Zoom out"><img src="../../images/ZoomOut.png" alt="Zoom out"></button>
+    <button id="profile-toggle" class="toggle on">Show profile</button>
+    <button id="folder">Data folder</button>
+    <button id="controls">Controls</button>
+  </nav>
+  <div class="page">
+    <aside>
+      <h1>Ground beneath<br>buildings</h1>
+      <p>Zürich · 250 × 250 m<br>0.5 m height pixels · EPSG:2056</p>
+      <p>1&nbsp; Inspect the original roofs and trees.<br>2&nbsp; Choose a prepared terrain estimate.<br>3&nbsp; Move the slider to reveal the ground.</p>
+      <label for="method">Terrain estimate</label>
+      <select id="method"><option value="1">Classical · morphological / TIN</option><option value="2">AI · DSM-only pix_grad</option></select>
+      <p id="percent-label">100% · prepared DTM endpoint</p>
+      <input id="slider" type="range" min="0" max="100" step="1" value="100" title="0% = original DSM; 100% = prepared DTM. Release to rebuild the surface.">
+      <div class="row"><button id="original">Original · 0%</button><button id="terrain">Terrain · 100%</button></div>
+      <p>Intermediate positions interpolate heights for display. They are not new terrain estimates.</p>
+      <div class="row field"><label for="exaggeration">Vertical exaggeration</label><input id="exaggeration" type="number" min="0.25" max="4" step="0.25" value="1"></div>
+      <pre id="metrics" class="metrics">Preparing the sample...</pre>
+      <p class="notice">Prepared results · no inference runs here. Both methods start from the original DSM independently.</p>
+      <button id="retry">Retry / reload sample</button>
+      <button id="cancel" disabled>Cancel loading</button>
+      <p>Source: Federal Office of Topography swisstopo<br>AI: David Perez · experimental pix_grad</p>
+    </aside>
+    <main>
+      <p>One observed surface. Two independent ways to estimate terrain.</p>
+      <div class="views">
+        <section><h2>ORIGINAL DSM · roofs + trees + ground</h2><div id="view0" class="view"></div></section>
+        <section><h2 id="heading1">CLASSICAL DTM · prepared terrain estimate</h2><div id="view1" class="view"></div></section>
+      </div>
+      <canvas id="chart"></canvas>
+      <p>Profile: gray DSM · teal classical · purple AI · dashed orange reference. The line is fixed across the same buildings in both views.</p>
+      <p>Local 3D preview of source LN02 heights; no geoid conversion. DSM/reference source years: 2018/2019. Fixed development crop; scores are not a held-out accuracy benchmark.</p>
+    </main>
+  </div>
+  <footer><span id="status" role="status">Preparing the sample...</span><progress id="progress" max="100" hidden></progress></footer>
+  <script src="renderer.js"></script>
+</body>
+</html>
