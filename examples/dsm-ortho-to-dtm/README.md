@@ -12,10 +12,10 @@ is evaluation-only; the methods do not feed each other. Inference, comparison an
 
 ```powershell
 npm install
-npm run dsm-to-dtm-ortho
+npm run dsm-ortho-to-dtm
 ```
 
-Options follow the example name: `npm run dsm-to-dtm-ortho -- --data-dir D:\cache` (default
+Options follow the example name: `npm run dsm-ortho-to-dtm -- --data-dir D:\cache` (default
 `outputs/data`), `--sample-archive <zip>` / `--sample-url <https-url>` (the pinned DSM +
 orthophoto ZIP), `--pix-model-archive`, `--rgb-model-archive`, `--pix-model-url`,
 `--rgb-model-url` (the pinned model ZIPs). All archive and file hashes stay enforced.

@@ -51,10 +51,10 @@ and terrain are downloaded and hash-verified on first start. See
 
 ## DsmOrthoToDtm
 
-Run `npm run dsm-to-dtm-ortho`. Compare classical, DSM-only pix_grad and DSM+RGB rgb_grad_fm
+Run `npm run dsm-ortho-to-dtm`. Compare classical, DSM-only pix_grad and DSM+RGB rgb_grad_fm
 terrain estimates on the same full Zurich DSM; orthophoto/DSM input context, four linked 2D
 maps, full-input and shared-crop scores, pixel probe and a staged comparison-folder export.
-See [workflow and notes](examples/dsm-to-dtm-ortho/README.md).
+See [workflow and notes](examples/dsm-ortho-to-dtm/README.md).
 
 ## BuildingChangeReview
 
