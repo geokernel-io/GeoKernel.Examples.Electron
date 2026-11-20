@@ -6,6 +6,7 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
+    "agent-map-assistant": "electron . agent-map-assistant",
     "dsm-to-dtm": "electron . dsm-to-dtm",
     "dsm-to-dtm-profile": "electron . dsm-to-dtm-profile",
     "dsm-to-dtm-accuracy": "electron . dsm-to-dtm-accuracy",

@@ -12,6 +12,14 @@ Official Electron and JavaScript examples for the GeoKernel native GIS SDK.
 
 From the repository root, install dependencies with `npm install` and run an example using its npm script.
 
+## AgentMapAssistant
+
+Run `npm run agent-map-assistant`. Ask for map operations in plain language; an LLM (or the
+offline demo's prepared plans) proposes a workflow DSL v2 plan that GeoKernel validates,
+previews, runs after confirmation when it changes data, undoes and records with hash-chained
+provenance. Needs `geokernel-electron` newer than 1.5.40 (or `GEOKERNEL_ELECTRON_MODULE`).
+See [workflow and setup](examples/agent-map-assistant/README.md).
+
 ## DsmToDtm
 
 Run `npm run dsm-to-dtm`. Ground beneath buildings: two linked native 3D views of

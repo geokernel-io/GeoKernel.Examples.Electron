@@ -4,3 +4,5 @@ outputs/
 examples/raster-overview/RasterOverviewData/
 .idea/
 .vscode/
+# Spatial index sidecars the SDK writes next to vector data
+*.pgidx

@@ -8,6 +8,7 @@ const path = require("path");
 process.env.GEOKERNEL_ICON_DIR = path.join(__dirname, "images");
 
 const EXAMPLES = {
+  "agent-map-assistant": "./examples/agent-map-assistant/main",
   "dsm-to-dtm": "./examples/dsm-to-dtm/main",
   "dsm-to-dtm-profile": "./examples/dsm-to-dtm-profile/main",
   "dsm-to-dtm-accuracy": "./examples/dsm-to-dtm-accuracy/main",
